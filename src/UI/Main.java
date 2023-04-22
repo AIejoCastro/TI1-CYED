@@ -1,7 +1,11 @@
 package UI;
+import Model.Airline;
+
 import java.util.*;
+
 public class Main {
     Scanner sc = new Scanner(System.in);
+    Airline avianca = new Airline();
     public static void main(String[] args) {
         Main m = new Main();
         m.load();
@@ -24,12 +28,16 @@ public class Main {
 
            switch (option) {
                case 1:
+                   System.out.println(avianca.searchPassengerInformation());
                    break;
                case 2:
+                   System.out.println(avianca.registerPassenger());
                    break;
                case 3:
+                   System.out.println(avianca.showOrderEntrance());
                    break;
                case 4:
+                   System.out.println(avianca.showOrderExit());
                    break;
                case 0:
                    System.out.println("Saliendo del programa...");
@@ -47,7 +55,7 @@ public class Main {
     }
 
     public void load(){
-
+        avianca.loadInfo();
 
     }
 }
