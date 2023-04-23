@@ -88,7 +88,6 @@ public class Main {
 
     }
 
-    //Revisar esto
     private void printQueue() {
 
             System.out.println(avianca.printQueue(queue,queueToPrint));
@@ -117,5 +116,3 @@ public class Main {
 
     }
 }
-
-
