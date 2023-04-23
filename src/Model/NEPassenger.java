@@ -15,7 +15,8 @@ public class NEPassenger extends Passenger implements Comparable<Passenger> {
         msg = "Name: " + getName() + " " + "\n" +
                 "Id: " + getId() + " " +"\n" +
                 "Seat: " + getSeat() + " " +"\n" +
-                "ArrivalTime: " + getArrivalTime() + " THE USER FOUNDED IS A NON EXECUTIVE PASSENGER";
+                "ArrivalTime: " + getArrivalTime() +
+                "\nTHE USER FOUNDED IS A NON EXECUTIVE PASSENGER";
         return msg;
     }
 

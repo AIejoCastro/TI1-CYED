@@ -8,8 +8,6 @@ import structures.Hashtable;
 import structures.HashtableNode;
 import structures.Queue;
 import structures.QueueNode;
-import structures.Stack;
-import structures.StackNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +21,6 @@ public class Airline {
     ArrayList<NEPassenger> nePassengers;
     ArrayList<EPassenger> ePassengers;
     ArrayList<Passenger> totalPassengers;
-
 
 
     private Hashtable hashtable;
@@ -51,16 +48,18 @@ public class Airline {
                     "Seat: " + passengerIsExecutive.getSeat() + " " +"\n" +
                     "Preference: " + passengerIsExecutive.isPreference() + " " +"\n" +
                     "ArrivalTime: " + passengerIsExecutive.getArrivalTime() + " " +"\n" +
-                    "Miles: " + passengerIsExecutive.getMiles() + " THE USER FOUNDED IS EXECUTIVE";
+                    "Miles: " + passengerIsExecutive.getMiles() +
+                    "\nTHE USER FOUNDED IS EXECUTIVE";
         } else {
             NEPassenger passengerIsNotExecutive = (NEPassenger) passengerFounded;
             msg = "Name: " + passengerIsNotExecutive.getName() + " " + "\n" +
                     "Id: " + passengerIsNotExecutive.getId() + " " +"\n" +
                     "Seat: " + passengerIsNotExecutive.getSeat() + " " +"\n" +
-                    "ArrivalTime: " + passengerIsNotExecutive.getArrivalTime() + " THE USER FOUNDED IS A NON EXECUTIVE PASSENGER";
+                    "ArrivalTime: " + passengerIsNotExecutive.getArrivalTime() +
+                    "\nTHE USER FOUNDED IS A NON EXECUTIVE PASSENGER";
 
         }
-    }
+        }
         return msg;
 
     }
@@ -81,11 +80,13 @@ public class Airline {
     }
 
     //Registrar la llegada de un pasajero
-    public String registerPassenger(int option)
-    {
-            defineHow();
-            return printPassengers(totalPassengers);
-
+    public String registerPassenger(Queue queue, Queue queueToPrint) {
+        String msg = "--Orden de llegada--" + "\n\n";
+        defineHow();
+        for (int i = 1; i <= totalPassengers.size(); i++) {
+            msg += registerPassengerAutomatically(queue, queueToPrint, String.valueOf(i));
+        }
+        return msg;
     }
 
     public String registerPassengerManually(String ID, Queue queue, Queue queueToPrint) {
@@ -99,7 +100,6 @@ public class Airline {
     }
     private String registerPassengerManually(String key,Queue queue, Queue queueToPrint, int x) {
         String msg;
-
         if(hashtable.containsKey(key)){
             Passenger passengerFounded = (Passenger) hashtable.search(key);
             if(passengerFounded.isExecutive()){
@@ -125,35 +125,39 @@ public class Airline {
         return msg;
     }
 
-    private String printPassengers(ArrayList<Passenger> arrayListTP){
-        String msg ="--Orden de llegada--" + "\n";
-
-        for (int i=0; i<arrayListTP.size();i++){
-
-            if(arrayListTP.get(i).isExecutive() == true){
-                msg+= arrayListTP.get(i).getName() + " " +"ID: " +arrayListTP.get(i).getId() + " " + "| EXECUTIVE |";
-                msg+= "\n";
-            }else {
-                msg+= arrayListTP.get(i).getName() + " " +"ID: " +arrayListTP.get(i).getId() + " " + "| NON EXECUTIVE |";
-                msg+= "\n";
+    private String registerPassengerAutomatically(Queue queue, Queue queueToPrint, String i) {
+        String msg;
+        if (hashtable.containsKey(i)) {
+            Passenger passengerFounded = (Passenger) hashtable.search(i);
+            if (passengerFounded.isExecutive()) {
+                EPassenger exPassenger = (EPassenger) passengerFounded;
+                QueueNode<EPassenger> passengerQueueNode = new QueueNode<>(exPassenger);
+                queue.offer(passengerQueueNode);
+                queueToPrint.offer(passengerQueueNode);
+                msg = "Name: " + passengerQueueNode.getValue().getName() + " with ID: " + passengerQueueNode.getValue().getId()+
+                        " WAS REGISTERED SUCCESSFULLY\n";
+            } else {
+                NEPassenger nePassenger = (NEPassenger) passengerFounded;
+                QueueNode<NEPassenger> node = new QueueNode<>(nePassenger);
+                queue.offer(node);
+                queueToPrint.offer(node);
+                msg = "Name: " + node.getValue().getName() + " with ID: " + node.getValue().getId()+
+                        " WAS REGISTERED SUCCESSFULLY\n";
             }
-
-        }
+        }else msg = "That ID is not registered on the database\n";
         return msg;
     }
 
-
     //Define el orden de llegada de los pasajeros
-
-    public void defineHow(){
-
-        for(int i=0; i<nePassengers.size();i++){
-            totalPassengers.add(nePassengers.get(i));
+    private void defineHow(){
+        for(int j=0;j<nePassengers.size();j++){
+            totalPassengers.add(nePassengers.get(j));
         }
 
         for(int j=0;j<ePassengers.size();j++){
             totalPassengers.add(ePassengers.get(j));
         }
+
         Collections.sort(totalPassengers);
     }
 
@@ -171,16 +175,11 @@ public class Airline {
     }
 
     // Archivos para guardar la información de los pasajeros
-
-
-    public void loadHashPassengerInfo()
-    {
-
+    public void loadHashPassengerInfo() {
        loadHashInfo();
     }
 
-
-    public void loadNEpassenger() throws IOException
+    public void loadNEPassenger() throws IOException
     {
         File file = new File(pathNE);
         FileInputStream fis = new FileInputStream(file);
@@ -196,7 +195,7 @@ public class Airline {
         fis.close();
     }
 
-    public void loadEpassenger() throws IOException
+    public void loadEPassenger() throws IOException
     {
         File file = new File(pathE);
         FileInputStream fis = new FileInputStream(file);
@@ -219,14 +218,7 @@ public class Airline {
         for (int i=0 ; i< queue.size();i++){
             msg += queueToPrint.peek() + "\n";
             queueToPrint.poll();
-
-
         }
-
         return msg;
     }
-
-
-
-
 }

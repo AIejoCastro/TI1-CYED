@@ -43,7 +43,7 @@ public class Main {
                    "3.Select the manually who is entering the airline "  + "\n"+
                    "4.Show the entrance" + "\n" +
                    "5.Show the exit" + "\n" +
-                   "9. Print queue" + "\n" +
+                   "9.Print queue" + "\n" +
                    "0.Exit");
 
            option = sc.nextInt();
@@ -56,19 +56,16 @@ public class Main {
 
                    break;
                case 2:
-                   System.out.println(avianca.registerPassenger(2));
+                   registerPassengerAutomatically();
                    break;
                case 3:
                    registerPassengersManually();
-
                    break;
                case 4:
                    System.out.println(avianca.showOrderEntrance());
-
                    break;
                case 5:
                    System.out.println(avianca.showOrderExit());
-
                    break;
                case 0:
                    System.out.println("Exiting the program...");
@@ -89,9 +86,7 @@ public class Main {
     }
 
     private void printQueue() {
-
             System.out.println(avianca.printQueue(queue,queueToPrint));
-
     }
 
     private void registerPassengersManually() {
@@ -106,13 +101,16 @@ public class Main {
             IDperson = sc.nextLine();
             System.out.println(avianca.registerPassengerManually(IDperson,queue,queueToPrint));
         }
+    }
 
-
+    private void registerPassengerAutomatically() {
+        queue = new Queue<>(54);
+        queueToPrint = new Queue<>(54);
+        System.out.println(avianca.registerPassenger(queue, queueToPrint));
     }
 
     public void load() throws IOException {
-        avianca.loadEpassenger();
-        avianca.loadNEpassenger();
-
+        avianca.loadEPassenger();
+        avianca.loadNEPassenger();
     }
 }

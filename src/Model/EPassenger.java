@@ -41,7 +41,8 @@ public class EPassenger extends Passenger implements Comparable<Passenger> {
                 "Seat: " + getSeat() + " " +"\n" +
                 "Preference: " + isPreference() + " " +"\n" +
                 "ArrivalTime: " + getArrivalTime() + " " +"\n" +
-                "Miles: " + getMiles() + " THE USER FOUNDED IS EXECUTIVE";
+                "Miles: " + getMiles() +
+                "\nTHE USER FOUNDED IS EXECUTIVE";
        return msg;
     }
 
