@@ -1,27 +1,29 @@
 package Model;
 
-public class Passenger {
 
-    //Passenger name
+import java.util.Comparator;
+
+public abstract class Passenger implements Comparable<Passenger> {
+
     private String name;
-
-    //Passenger identification
     private String id;
-      //Seat
     private String seat;
-    //Arrival time
-    private double arrivalTime;
+    public double arrivalTime;
+    private boolean executive;
 
-    public Passenger(String name, String id, String seat,double arrivalTime) {
+    public Passenger(String name, String id, String seat, double arrivalTime, boolean executive) {
         this.name = name;
         this.id = id;
         this.seat = seat;
-        this.arrivalTime= arrivalTime;
+        this.arrivalTime = arrivalTime;
+        this.executive = executive;
+
     }
 
     public String getName() {
         return name;
     }
+
 
     public double getArrivalTime(){
         return arrivalTime;
@@ -39,9 +41,6 @@ public class Passenger {
         this.id = id;
     }
 
-
-
-
     public String getSeat() {
         return seat;
     }
@@ -50,7 +49,15 @@ public class Passenger {
         this.seat = seat;
     }
 
-    public void setArrivalTime(double arrivalTime){
-        this.arrivalTime = arrivalTime;
+
+
+
+    public boolean isExecutive() {
+        return executive;
     }
+
+    public void setExecutive(boolean executive) {
+        this.executive = executive;
+    }
+
 }
