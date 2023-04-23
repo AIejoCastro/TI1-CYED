@@ -75,6 +75,7 @@ public class Main {
                    break;
                case 9:
                    printQueue();
+                   break;
                default:
                    System.out.println("Wrong option");
                    break;
