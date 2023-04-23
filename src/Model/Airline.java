@@ -8,11 +8,11 @@ import structures.Hashtable;
 import structures.HashtableNode;
 import structures.Queue;
 import structures.QueueNode;
+import structures.Stack;
+import structures.StackNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
-
 
 
 public class Airline {
@@ -78,9 +78,6 @@ public class Airline {
             hashtable.insert(passengerE,ePassengers.get(j).getId());
 
         }
-
-
-
     }
 
     //Registrar la llegada de un pasajero
@@ -115,10 +112,6 @@ public class Airline {
 
                 msg= "Name: " + passengerQueueNode.getValue().getName() + " with ID: " + passengerQueueNode.getValue().getId()+
                 " WAS REGISTERED SUCCESSFULLY";
-
-
-
-
             }else{
                 NEPassenger nePassenger = (NEPassenger) passengerFounded;
                 QueueNode<NEPassenger> node = new QueueNode<>(nePassenger);
@@ -126,15 +119,10 @@ public class Airline {
                 queueToPrint.offer(node);
                 msg= "Name: " + node.getValue().getName() + " with ID: " + node.getValue().getId()+
                 " WAS REGISTERED SUCCESSFULLY";
-
             }
-
-
-
         }else msg = "That ID is not registered on the database";
 
         return msg;
-
     }
 
     private String printPassengers(ArrayList<Passenger> arrayListTP){
@@ -151,8 +139,6 @@ public class Airline {
             }
 
         }
-
-
         return msg;
     }
 
@@ -168,8 +154,7 @@ public class Airline {
         for(int j=0;j<ePassengers.size();j++){
             totalPassengers.add(ePassengers.get(j));
         }
-            Collections.sort(totalPassengers);
-
+        Collections.sort(totalPassengers);
     }
 
 

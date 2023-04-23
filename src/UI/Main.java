@@ -36,13 +36,14 @@ public class Main {
     int option = 0;
        do{
 
-           System.out.println("Welcome to the Avianca Airline assistant" + "\n" +
-           "1.Passenger Information" + "\n" +
-           "2.Simulate the entry of all passengers" + "\n" +
-           "3.Select the manually who is entering the airline "  + "\n"+
-           "4.Show the entrance" + "\n" +
-           "5.Show the exit" + "\n" +
-           "9. Print queue" + "\n" +
+           System.out.println("----------------------------------\n" +
+                   "Welcome to the Avianca Airline assistant" + "\n" +
+                   "1.Passenger Information" + "\n" +
+                   "2.Simulate the entry of all passengers" + "\n" +
+                   "3.Select the manually who is entering the airline "  + "\n"+
+                   "4.Show the entrance" + "\n" +
+                   "5.Show the exit" + "\n" +
+                   "9. Print queue" + "\n" +
                    "0.Exit");
 
            option = sc.nextInt();
@@ -73,8 +74,8 @@ public class Main {
                    System.out.println("Exiting the program...");
                    break;
                case 9:
-                   printQueque();
-
+                   printQueue();
+                   break;
                default:
                    System.out.println("Wrong option");
                    break;
@@ -87,7 +88,8 @@ public class Main {
 
     }
 
-    private void printQueque() {
+    //Revisar esto
+    private void printQueue() {
 
             System.out.println(avianca.printQueue(queue,queueToPrint));
 
