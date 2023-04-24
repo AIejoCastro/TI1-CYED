@@ -83,45 +83,11 @@ public class Airline {
     public String registerPassenger(Queue queue, Queue queueToPrint) {
         String msg = "--Orden de llegada--" + "\n\n";
         defineHow();
-        for (int i = 1; i <= totalPassengers.size(); i++) {
-            msg += registerPassengerAutomatically(queue, queueToPrint, String.valueOf(i));
-        }
-        return msg;
-    }
-
-    public String registerPassengerManually(String ID, Queue queue, Queue queueToPrint) {
-
-        String msg;
-        int op = 2;
-        msg = registerPassengerManually(ID,queue,queueToPrint,2);
-
-        return msg;
-
-    }
-    private String registerPassengerManually(String key,Queue queue, Queue queueToPrint, int x) {
-        String msg;
-        if(hashtable.containsKey(key)){
-            Passenger passengerFounded = (Passenger) hashtable.search(key);
-            if(passengerFounded.isExecutive()){
-                EPassenger exPassenger = (EPassenger) passengerFounded;
-
-                QueueNode<EPassenger> passengerQueueNode = new QueueNode<>(exPassenger);
-
-                queue.offer(passengerQueueNode);
-                queueToPrint.offer(passengerQueueNode);
-
-                msg= "Name: " + passengerQueueNode.getValue().getName() + " with ID: " + passengerQueueNode.getValue().getId()+
-                " WAS REGISTERED SUCCESSFULLY";
-            }else{
-                NEPassenger nePassenger = (NEPassenger) passengerFounded;
-                QueueNode<NEPassenger> node = new QueueNode<>(nePassenger);
-                queue.offer(node);
-                queueToPrint.offer(node);
-                msg= "Name: " + node.getValue().getName() + " with ID: " + node.getValue().getId()+
-                " WAS REGISTERED SUCCESSFULLY";
+        while (!totalPassengers.isEmpty()) {
+            for (int i = 1; i <= totalPassengers.size(); i++) {
+                msg += registerPassengerAutomatically(queue, queueToPrint, String.valueOf(i));
             }
-        }else msg = "That ID is not registered on the database";
-
+        }
         return msg;
     }
 
@@ -161,6 +127,41 @@ public class Airline {
         Collections.sort(totalPassengers);
     }
 
+    public String registerPassengerManually(String ID, Queue queue, Queue queueToPrint) {
+
+        String msg;
+        int op = 2;
+        msg = registerPassengerManually(ID,queue,queueToPrint,2);
+
+        return msg;
+
+    }
+    private String registerPassengerManually(String key,Queue queue, Queue queueToPrint, int x) {
+        String msg;
+        if(hashtable.containsKey(key)){
+            Passenger passengerFounded = (Passenger) hashtable.search(key);
+            if(passengerFounded.isExecutive()){
+                EPassenger exPassenger = (EPassenger) passengerFounded;
+
+                QueueNode<EPassenger> passengerQueueNode = new QueueNode<>(exPassenger);
+
+                queue.offer(passengerQueueNode);
+                queueToPrint.offer(passengerQueueNode);
+
+                msg= "Name: " + passengerQueueNode.getValue().getName() + " with ID: " + passengerQueueNode.getValue().getId()+
+                " WAS REGISTERED SUCCESSFULLY";
+            }else{
+                NEPassenger nePassenger = (NEPassenger) passengerFounded;
+                QueueNode<NEPassenger> node = new QueueNode<>(nePassenger);
+                queue.offer(node);
+                queueToPrint.offer(node);
+                msg= "Name: " + node.getValue().getName() + " with ID: " + node.getValue().getId()+
+                " WAS REGISTERED SUCCESSFULLY";
+            }
+        }else msg = "That ID is not registered on the database";
+
+        return msg;
+    }
 
     //Mostrarle al asistente el orden de ingreso de los pasajeros basado en lo seleccionado
     public String showOrderEntrance()

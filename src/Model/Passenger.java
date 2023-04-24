@@ -10,6 +10,7 @@ public abstract class Passenger implements Comparable<Passenger> {
     private String seat;
     public double arrivalTime;
     private boolean executive;
+    private double entrance;
 
     public Passenger(String name, String id, String seat, double arrivalTime, boolean executive) {
         this.name = name;
@@ -24,9 +25,12 @@ public abstract class Passenger implements Comparable<Passenger> {
         return name;
     }
 
-
     public double getArrivalTime(){
         return arrivalTime;
+    }
+
+    public void setArrivalTime(double arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
     public void setName(String name) {
@@ -49,9 +53,6 @@ public abstract class Passenger implements Comparable<Passenger> {
         this.seat = seat;
     }
 
-
-
-
     public boolean isExecutive() {
         return executive;
     }
@@ -60,4 +61,11 @@ public abstract class Passenger implements Comparable<Passenger> {
         this.executive = executive;
     }
 
+    public double getEntrance() {
+        return entrance;
+    }
+
+    public void setEntrance(double entrance) {
+        this.entrance = entrance;
+    }
 }
