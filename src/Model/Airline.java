@@ -21,8 +21,6 @@ public class Airline {
     ArrayList<NEPassenger> nePassengers;
     ArrayList<EPassenger> ePassengers;
     ArrayList<Passenger> totalPassengers;
-    ArrayList<EPassenger> timeEPassengers;
-    ArrayList<EPassenger> milesEPassengers;
 
     private Hashtable hashtable;
 
@@ -30,8 +28,6 @@ public class Airline {
         ePassengers = new ArrayList<>();
         nePassengers = new ArrayList<>();
         totalPassengers= new ArrayList<>();
-        timeEPassengers = new ArrayList<>();
-        milesEPassengers = new ArrayList<>();
         hashtable = new Hashtable(54);
 
     }
@@ -85,6 +81,14 @@ public class Airline {
     public String registerPassenger(Queue queue, Queue queueToPrint) {
         String msg = "--Orden de llegada--" + "\n\n";
         defineHow();
+        for (int i = 0; i <= totalPassengers.size(); i++) {
+            if (totalPassengers.get(i).isExecutive()) {
+                calculateEntranceEPassengers((EPassenger) totalPassengers.get(i));
+            }
+            if (!totalPassengers.get(i).isExecutive()) {
+                calculateEntranceNEPassengers((NEPassenger) totalPassengers.get(i));
+            }
+        }
         for (int i = 1; i <= totalPassengers.size(); i++) {
             msg += registerPassengerAutomatically(queue, queueToPrint, String.valueOf(i));
         }
@@ -116,83 +120,65 @@ public class Airline {
 
     //Define el orden de llegada de los pasajeros
     private void defineHow(){
-        //Variable para definir la cantidad de entrance
-        int x = 18;
-
-        //Paso todos los pasajeros de EPassengers a los dos arreglos
-        for(int j=0;j<ePassengers.size();j++){
-            timeEPassengers.add(ePassengers.get(j));
-            milesEPassengers.add(ePassengers.get(j));
-        }
-
-        //Acomodo de menor a mayor por tiempo de llegada el arreglo de pasajeros simples
-        for (int i = 0; i < nePassengers.size(); i++) {
-            for (int j = 1; j < nePassengers.size() - i; j++) {
-                if (nePassengers.get(j).getArrivalTime() < nePassengers.get(j - 1).getArrivalTime()) {
-                    NEPassenger temp = nePassengers.get(j - 1);
-                    nePassengers.set(j - 1, nePassengers.get(j));
-                    nePassengers.set(j, temp);
-                }
-            }
-        }
-
-        //Acomodo el arreglo de tiempo de pasajeros ejecutivos de menor a mayor por tiempo de llegada
-        for (int i = 0; i < timeEPassengers.size(); i++) {
-            for (int j = 1; j < timeEPassengers.size() - i; j++) {
-                if (timeEPassengers.get(j).getArrivalTime() < timeEPassengers.get(j - 1).getArrivalTime()) {
-                    EPassenger temp = timeEPassengers.get(j - 1);
-                    timeEPassengers.set(j - 1, timeEPassengers.get(j));
-                    timeEPassengers.set(j, temp);
-                }
-            }
-        }
-
-        //Acomodo el arreglo de millas de pasajeros de mayor a menor por numero de millas
-        for (int i = 0; i < milesEPassengers.size(); i++) {
-            for (int j = 1; j < milesEPassengers.size() - i; j++) {
-                if (milesEPassengers.get(j).getMiles() > milesEPassengers.get(j - 1).getMiles()) {
-                    EPassenger temp = milesEPassengers.get(j - 1);
-                    milesEPassengers.set(j - 1, milesEPassengers.get(j));
-                    milesEPassengers.set(j, temp);
-                }
-            }
-        }
-
-        //A los pasajeros de tiempo, se le asigna 18 al primero 17 al segundo y así sucesivamente
-        for (int i = 0; i < timeEPassengers.size(); i++) {
-            timeEPassengers.get(i).setEntrance(x);
-            x--;
-        }
-
-        //Reset de la variable x
-        x = 18;
-
-        //A los pasajeros de millas, se les asigna 18 al primero + el numero que tenga antes asignado por el anterior for, 17 al segundo y asi sucesivamente
-        for (int i = 0; i < milesEPassengers.size(); i++) {
-            milesEPassengers.get(i).setEntrance(milesEPassengers.get(i).getEntrance() + x);
-            x--;
-        }
-
-        //Acomodo el arreglo de pasajeros de mayor a menor por valor de entrada
-        for (int i = 0; i < ePassengers.size(); i++) {
-            for (int j = 1; j < ePassengers.size() - i; j++) {
-                if (ePassengers.get(j).getEntrance() > ePassengers.get(j - 1).getEntrance()) {
-                    EPassenger temp = ePassengers.get(j - 1);
-                    ePassengers.set(j - 1, ePassengers.get(j));
-                    ePassengers.set(j, temp);
-                }
-            }
-        }
-
-        //Ingreso de pasajeros ejecutivos por orden al arreglo de total de pasajeros
         for (int i = 0; i < ePassengers.size(); i++) {
             totalPassengers.add(ePassengers.get(i));
         }
 
-        //Ingreso de pasajeros simples por orden al arreglo de total de pasajeros
         for (int i = 0; i < nePassengers.size(); i++) {
             totalPassengers.add(nePassengers.get(i));
         }
+
+        Collections.sort(totalPassengers);
+    }
+
+    public void calculateEntranceNEPassengers(NEPassenger passenger) {
+        int x = 0;
+
+        if(passenger.getSeat().charAt(1) == '4' || passenger.getSeat().charAt(1) == '5' || passenger.getSeat().charAt(1) == '6'){
+            x += 100;
+        } else if (passenger.getSeat().charAt(1) == '7' || passenger.getSeat().charAt(1) == '8' || passenger.getSeat().charAt(1) == '9') {
+            x += 150;
+        }
+
+    }
+
+    public void calculateEntranceEPassengers(EPassenger passenger) {
+        //Se inicia en 1050 debido a que estan en los primeros asientos y es ejecutivo
+        int x = 1050;
+
+        x += calculateMiles(passenger.getMiles());
+
+        if (passenger.isPreference()) {
+            x += 500;
+        }
+
+        if (passenger.getSeat().charAt(0) == 'A' || passenger.getSeat().charAt(1) == 'F'){
+            x += 150;
+        } else if (passenger.getSeat().charAt(0) == 'B' || passenger.getSeat().charAt(0) == 'E'){
+            x += 100;
+        } else if (passenger.getSeat().charAt(0) == 'C' || passenger.getSeat().charAt(0) == 'D') {
+            x += 50;
+        }
+
+        passenger.setEntrance(x);
+    }
+
+    public int calculateMiles(double miles) {
+        int x = 0;
+
+        if (miles >= 0 && miles <= 200) {
+            x = 100;
+        } else if (miles > 200 && miles <= 400) {
+            x = 200;
+        } else if (miles > 400 && miles <= 600) {
+            x = 300;
+        } else if (miles > 600 && miles <= 800) {
+            x = 400;
+        } else if (miles > 800 && miles <= 1000) {
+            x = 500;
+        }
+
+        return x;
     }
 
     public String registerPassengerManually(String ID, Queue queue, Queue queueToPrint) {

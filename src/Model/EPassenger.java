@@ -9,9 +9,6 @@ public class EPassenger extends Passenger implements Comparable<Passenger> {
     private double miles;
     //Preference
     private boolean preference;
-    //Entrance
-    private double entrance;
-
 
     public EPassenger(String name, String id, String seat, double arrivalTime, boolean executive, double miles, boolean preference) {
         super(name, id, seat, arrivalTime, executive);
@@ -33,14 +30,6 @@ public class EPassenger extends Passenger implements Comparable<Passenger> {
 
     public void setPreference(boolean preference) {
         this.preference = preference;
-    }
-
-    public double getEntrance() {
-        return entrance;
-    }
-
-    public void setEntrance(double entrance) {
-        this.entrance = entrance;
     }
 
     @Override
