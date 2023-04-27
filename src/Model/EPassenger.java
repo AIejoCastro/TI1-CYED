@@ -44,9 +44,6 @@ public class EPassenger extends Passenger implements Comparable<Passenger> {
        return msg;
     }
 
-
-
-
     @Override
     public int compareTo(Passenger o) {
         if(o.getArrivalTime()>arrivalTime){

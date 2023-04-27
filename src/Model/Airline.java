@@ -4,10 +4,7 @@ package Model;
 import java.io.*;
 import java.util.Arrays;
 import com.google.gson.Gson;
-import structures.Hashtable;
-import structures.HashtableNode;
-import structures.Queue;
-import structures.QueueNode;
+import structures.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,6 +18,8 @@ public class Airline {
     ArrayList<NEPassenger> nePassengers;
     ArrayList<EPassenger> ePassengers;
     ArrayList<Passenger> totalPassengers;
+    private PriorityQueue ePassengerEntrance;
+    private PriorityQueue nePassengerEntrance;
 
     private Hashtable hashtable;
 
@@ -29,6 +28,8 @@ public class Airline {
         nePassengers = new ArrayList<>();
         totalPassengers= new ArrayList<>();
         hashtable = new Hashtable(54);
+        ePassengerEntrance = new PriorityQueue(18);
+        nePassengerEntrance = new PriorityQueue(36);
 
     }
     //Buscar la información de un pasajero
@@ -81,6 +82,7 @@ public class Airline {
     public String registerPassenger(Queue queue, Queue queueToPrint) {
         String msg = "--Orden de llegada--" + "\n\n";
         defineHow();
+        /*
         for (int i = 0; i <= totalPassengers.size(); i++) {
             if (totalPassengers.get(i).isExecutive()) {
                 calculateEntranceEPassengers((EPassenger) totalPassengers.get(i));
@@ -89,6 +91,7 @@ public class Airline {
                 calculateEntranceNEPassengers((NEPassenger) totalPassengers.get(i));
             }
         }
+        */
         for (int i = 1; i <= totalPassengers.size(); i++) {
             msg += registerPassengerAutomatically(queue, queueToPrint, String.valueOf(i));
         }
@@ -218,8 +221,12 @@ public class Airline {
     }
 
     //Mostrarle al asistente el orden de ingreso de los pasajeros basado en lo seleccionado
-    public String showOrderEntrance()
-    {
+    public String showOrderEntrance() {
+        return showEntrance();
+    }
+
+    private String showEntrance() {
+
         return null;
     }
 
