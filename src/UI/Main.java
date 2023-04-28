@@ -59,7 +59,7 @@ public class Main {
                    registerPassengerAutomatically();
                    break;
                case 3:
-                   //No
+                   //FALTA
                    registerPassengersManually();
                    break;
                case 4:
@@ -67,15 +67,19 @@ public class Main {
                    System.out.println(avianca.showOrderEntrance());
                    break;
                case 5:
+                   //Ya
                    System.out.println(avianca.showOrderExit());
                    break;
                case 0:
+                   //Ya
                    System.out.println("Exiting the program...");
                    break;
                case 9:
+                   //Ya
                    printQueue();
                    break;
                default:
+                   //Ya
                    System.out.println("Wrong option");
                    break;
 

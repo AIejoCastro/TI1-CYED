@@ -150,7 +150,11 @@ public class Airline {
 
         for (int i = 0; i < ePassengers.size(); i++) {
             EPassenger passenger = (EPassenger) ePassengerEntrance.extractMax();
-            msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + "\n";
+            if(passenger.isPreference())
+            msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat()+ " " + "DISCAPACIDAD" + " " + "miles: " + passenger.getMiles()+ "\n";
+            else msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat()  + " " + "miles: " +passenger.getMiles()+ "\n";
+
+
         }
 
         msg += "------------------------\n" +
@@ -159,7 +163,8 @@ public class Airline {
 
         for (int i = 0; i < nePassengers.size(); i++) {
             NEPassenger passenger = (NEPassenger) nePassengerEntrance.extractMax();
-            msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + "\n";
+
+            msg += i + ") " +passenger.getName() + " " + passenger.getSeat() +  "\n";
         }
 
         return msg;
@@ -167,19 +172,20 @@ public class Airline {
     public int calculateEntranceNEPassengers(NEPassenger passenger, int arrival) {
         int x = 0;
 
-        if(passenger.getSeat().charAt(1)=='4')x = 140;
-        else if(passenger.getSeat().charAt(1)=='5') x=180;
-        else if (passenger.getSeat().charAt(1)=='6') x=220;
-        else if (passenger.getSeat().charAt(1)=='7') x=260;
-        else if (passenger.getSeat().charAt(1)=='8') x=300;
-        else if (passenger.getSeat().charAt(1)=='9') x=340;
-
-        if(passenger.getSeat().charAt(0)=='A')x+= 100;
-        else if(passenger.getSeat().charAt(0)=='B') x+=80;
-        else if (passenger.getSeat().charAt(0)=='C') x+=60;
-        else if (passenger.getSeat().charAt(0)=='D') x+=60;
-        else if (passenger.getSeat().charAt(0)=='E') x+=80;
-        else if (passenger.getSeat().charAt(0)=='F') x+=100;
+        if(passenger.getSeat().charAt(1)=='4')x = -5000;
+        else if(passenger.getSeat().charAt(1)=='5') x=20000;
+        else if (passenger.getSeat().charAt(1)=='6') x=100000;
+        else if (passenger.getSeat().charAt(1)=='7') x=150000;
+        else if (passenger.getSeat().charAt(1)=='8') x=200000;
+        else if (passenger.getSeat().charAt(1)=='9') x=250000;
+        //ANA      A4    =  100000
+        //VALENTINA  D7 = 50000 - 5000
+        if(passenger.getSeat().charAt(0)=='A')x+= 10000;
+        else if(passenger.getSeat().charAt(0)=='B') x+=5000;
+        else if (passenger.getSeat().charAt(0)=='C') x+=-5000;
+        else if (passenger.getSeat().charAt(0)=='D') x+=-5000;
+        else if (passenger.getSeat().charAt(0)=='E') x+=5000;
+        else if (passenger.getSeat().charAt(0)=='F') x+=10000;
 
         x -= arrival;
 
@@ -189,21 +195,21 @@ public class Airline {
     public double calculateEntranceEPassengers(EPassenger passenger, int arrival) {
         double x = 0;
 
-        if(passenger.getSeat().charAt(1)=='1')x = 20;
-        else if(passenger.getSeat().charAt(1)=='2') x= 60;
-        else if (passenger.getSeat().charAt(1)=='3') x= 100;
+        if(passenger.getSeat().charAt(1)=='1')x = -5000;
+        else if(passenger.getSeat().charAt(1)=='2') x= 20000;
+        else if (passenger.getSeat().charAt(1)=='3') x= 100000;
 
-        if(passenger.getSeat().charAt(0)=='A')x+= 100;
-        else if(passenger.getSeat().charAt(0)=='B') x+=80;
-        else if (passenger.getSeat().charAt(0)=='C') x+=60;
-        else if (passenger.getSeat().charAt(0)=='D') x+=60;
-        else if (passenger.getSeat().charAt(0)=='E') x+=80;
-        else if (passenger.getSeat().charAt(0)=='F') x+=100;
+        if(passenger.getSeat().charAt(0)=='A')x+= 10000;
+        else if(passenger.getSeat().charAt(0)=='B') x+=5000;
+        else if (passenger.getSeat().charAt(0)=='C') x+=-5000;
+        else if (passenger.getSeat().charAt(0)=='D') x+=-5000;
+        else if (passenger.getSeat().charAt(0)=='E') x+=5000;
+        else if (passenger.getSeat().charAt(0)=='F') x+=10000;
 
         x -= arrival;
         x += passenger.getMiles();
         if (passenger.isPreference()) {
-            x += 1000;
+            x += 600000;
         }
 
         return x;
@@ -270,7 +276,14 @@ public class Airline {
 
         for (int i = 0; i < ePassengers.size(); i++) {
             EPassenger passenger = (EPassenger) ePassengerEntrance.extractMax();
-            msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + "\n";
+            if(passenger.isPreference()) {
+                msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + "Presenta discapacidad" + "\n";
+
+            }
+            else {
+                msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + "No presenta discapacidad"+"\n";
+
+            }
         }
 
         for (int i = 0; i < nePassengers.size(); i++) {
@@ -284,19 +297,20 @@ public class Airline {
     public int calculateExitNEPassengers(NEPassenger passenger, int arrival){
         int x = 0;
 
-        if(passenger.getSeat().charAt(1)=='4')x = 340;
-        else if(passenger.getSeat().charAt(1)=='5') x=300;
-        else if (passenger.getSeat().charAt(1)=='6') x=260;
-        else if (passenger.getSeat().charAt(1)=='7') x=220;
-        else if (passenger.getSeat().charAt(1)=='8') x=180;
-        else if (passenger.getSeat().charAt(1)=='9') x=140;
-
-        if(passenger.getSeat().charAt(0)=='A')x+= 60;
-        else if(passenger.getSeat().charAt(0)=='B') x+=80;
-        else if (passenger.getSeat().charAt(0)=='C') x+=100;
-        else if (passenger.getSeat().charAt(0)=='D') x+=100;
-        else if (passenger.getSeat().charAt(0)=='E') x+=80;
-        else if (passenger.getSeat().charAt(0)=='F') x+=60;
+        if(passenger.getSeat().charAt(1)=='4')x = 250000;
+        else if(passenger.getSeat().charAt(1)=='5') x=200000;
+        else if (passenger.getSeat().charAt(1)=='6') x=150000;
+        else if (passenger.getSeat().charAt(1)=='7') x=100000;
+        else if (passenger.getSeat().charAt(1)=='8') x=20000;
+        else if (passenger.getSeat().charAt(1)=='9') x=-5000;
+        //ANA      A4    =  100000
+        //VALENTINA  D7 = 50000 - 5000
+        if(passenger.getSeat().charAt(0)=='A')x+= -5000;
+        else if(passenger.getSeat().charAt(0)=='B') x+=5000;
+        else if (passenger.getSeat().charAt(0)=='C') x+=10000;
+        else if (passenger.getSeat().charAt(0)=='D') x+=10000;
+        else if (passenger.getSeat().charAt(0)=='E') x+=5000;
+        else if (passenger.getSeat().charAt(0)=='F') x+=-5000;
 
         x -= arrival;
 
@@ -306,16 +320,16 @@ public class Airline {
     public double calculateExitEPassengers(EPassenger passenger, int arrival) {
         double x = 0;
 
-        if(passenger.getSeat().charAt(1)=='1')x = 100;
-        else if(passenger.getSeat().charAt(1)=='2') x= 60;
-        else if (passenger.getSeat().charAt(1)=='3') x= 20;
+        if(passenger.getSeat().charAt(1)=='1')x = 100000;
+        else if(passenger.getSeat().charAt(1)=='2') x= 20000;
+        else if (passenger.getSeat().charAt(1)=='3') x= -5000;
 
-        if(passenger.getSeat().charAt(0)=='A')x+= 60;
-        else if(passenger.getSeat().charAt(0)=='B') x+=80;
-        else if (passenger.getSeat().charAt(0)=='C') x+=100;
-        else if (passenger.getSeat().charAt(0)=='D') x+=100;
-        else if (passenger.getSeat().charAt(0)=='E') x+=80;
-        else if (passenger.getSeat().charAt(0)=='F') x+=60;
+        if(passenger.getSeat().charAt(0)=='A')x+= -5000;
+        else if(passenger.getSeat().charAt(0)=='B') x+=5000;
+        else if (passenger.getSeat().charAt(0)=='C') x+=10000;
+        else if (passenger.getSeat().charAt(0)=='D') x+=10000;
+        else if (passenger.getSeat().charAt(0)=='E') x+=5000;
+        else if (passenger.getSeat().charAt(0)=='F') x+=-5000;
 
         x -= arrival;
 
