@@ -49,19 +49,21 @@ public class Main {
            option = sc.nextInt();
            sc.nextLine();
            switch (option) {
-               case 1:  // Ya quedó listo el primer caso
+               case 1:  // Ya
                    System.out.println("Please digit the id of the person you want to search: ");
                    String key = sc.nextLine();
                    System.out.println(avianca.searchPassengerInformation(key));
-
                    break;
                case 2:
+                   //Ya
                    registerPassengerAutomatically();
                    break;
                case 3:
+                   //No
                    registerPassengersManually();
                    break;
                case 4:
+                   //Ya
                    System.out.println(avianca.showOrderEntrance());
                    break;
                case 5:

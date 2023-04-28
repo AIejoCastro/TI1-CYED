@@ -63,7 +63,7 @@ public class Airline {
 
     }
     //Registra la información de los pasajeros en tablas hash
-    private void loadHashInfo(){
+    private void loadHashInfo() {
 
         for(int i=0; i<nePassengers.size();i++){
             HashtableNode passengerNE = new HashtableNode<>(nePassengers.get(i).getId(),nePassengers.get(i));
@@ -112,7 +112,7 @@ public class Airline {
     }
 
     //Define el orden de llegada de los pasajeros
-    private void defineHow(){
+    private void defineHow() {
         for (int i = 0; i < ePassengers.size(); i++) {
             totalPassengers.add(ePassengers.get(i));
         }
@@ -136,7 +136,7 @@ public class Airline {
         PriorityQueueNode eNode;
 
         for(int i=0;i<nePassengers.size();i++){
-            neNode = new PriorityQueueNode<>(nePassengers.get(i),calculateEntranceNEPassengers(nePassengers.get(i),i));
+            neNode = new PriorityQueueNode<>(nePassengers.get(i),calculateEntranceNEPassengers(nePassengers.get(i),i + 18));
             nePassengerEntrance.insert(neNode);
         }
         for(int i=0; i<ePassengers.size();i++){
@@ -148,7 +148,7 @@ public class Airline {
                 "Executive/Disabled group\n" +
                 "Please present yourself in the respective order\n\n";
 
-        for (int i = 0; i < ePassengerEntrance.occupedSize(); i++) {
+        for (int i = 0; i < ePassengers.size(); i++) {
             EPassenger passenger = (EPassenger) ePassengerEntrance.extractMax();
             msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + "\n";
         }
@@ -157,7 +157,7 @@ public class Airline {
                 "Economy group\n" +
                 "Please present yourself in the respective order\n\n";
 
-        for (int i = 0; i < nePassengerEntrance.occupedSize(); i++) {
+        for (int i = 0; i < nePassengers.size(); i++) {
             NEPassenger passenger = (NEPassenger) nePassengerEntrance.extractMax();
             msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + "\n";
         }
@@ -165,14 +165,14 @@ public class Airline {
         return msg;
     }
     public int calculateEntranceNEPassengers(NEPassenger passenger, int arrival) {
-
         int x = 0;
-        if(passenger.getSeat().charAt(1)=='4')x = 20;
-        else if(passenger.getSeat().charAt(1)=='5') x=60;
-        else if (passenger.getSeat().charAt(1)=='6') x=100;
-        else if (passenger.getSeat().charAt(1)=='7') x=140;
-        else if (passenger.getSeat().charAt(1)=='8') x=180;
-        else if (passenger.getSeat().charAt(1)=='9') x=220;
+
+        if(passenger.getSeat().charAt(1)=='4')x = 140;
+        else if(passenger.getSeat().charAt(1)=='5') x=180;
+        else if (passenger.getSeat().charAt(1)=='6') x=220;
+        else if (passenger.getSeat().charAt(1)=='7') x=260;
+        else if (passenger.getSeat().charAt(1)=='8') x=300;
+        else if (passenger.getSeat().charAt(1)=='9') x=340;
 
         if(passenger.getSeat().charAt(0)=='A')x+= 100;
         else if(passenger.getSeat().charAt(0)=='B') x+=80;
@@ -189,12 +189,9 @@ public class Airline {
     public double calculateEntranceEPassengers(EPassenger passenger, int arrival) {
         double x = 0;
 
-        if(passenger.getSeat().charAt(1)=='4')x = 20;
-        else if(passenger.getSeat().charAt(1)=='5') x=60;
-        else if (passenger.getSeat().charAt(1)=='6') x=100;
-        else if (passenger.getSeat().charAt(1)=='7') x=140;
-        else if (passenger.getSeat().charAt(1)=='8') x=180;
-        else if (passenger.getSeat().charAt(1)=='9') x=220;
+        if(passenger.getSeat().charAt(1)=='1')x = 20;
+        else if(passenger.getSeat().charAt(1)=='2') x= 60;
+        else if (passenger.getSeat().charAt(1)=='3') x= 100;
 
         if(passenger.getSeat().charAt(0)=='A')x+= 100;
         else if(passenger.getSeat().charAt(0)=='B') x+=80;
@@ -212,24 +209,6 @@ public class Airline {
         return x;
     }
 
-    public int calculateMiles(double miles) {
-        int x = 0;
-
-        if (miles >= 0 && miles <= 200) {
-            x = 100;
-        } else if (miles > 200 && miles <= 400) {
-            x = 200;
-        } else if (miles > 400 && miles <= 600) {
-            x = 300;
-        } else if (miles > 600 && miles <= 800) {
-            x = 400;
-        } else if (miles > 800 && miles <= 1000) {
-            x = 500;
-        }
-
-        return x;
-    }
-
     public String registerPassengerManually(String ID, Queue queue, Queue queueToPrint) {
 
         String msg;
@@ -239,6 +218,7 @@ public class Airline {
         return msg;
 
     }
+
     private String registerPassengerManually(String key,Queue queue, Queue queueToPrint, int x) {
         String msg;
         if(hashtable.containsKey(key)){
@@ -267,9 +247,79 @@ public class Airline {
     }
 
     //Mostrarle al asistente el orden de salida de los pasajeros
-    public String  showOrderExit()
-    {
-        return null;
+    public String  showOrderExit() {
+        return showExit();
+    }
+
+    private String showExit() {
+        String msg = "";
+        ArrayList<Passenger> orderEntrance = totalPassengers;
+        PriorityQueueNode neNodeE;
+        PriorityQueueNode eNodeE;
+
+        for(int i=0;i<nePassengers.size();i++){
+            neNodeE = new PriorityQueueNode<>(nePassengers.get(i),calculateExitNEPassengers(nePassengers.get(i), i + 18));
+            nePassengerEntrance.insert(neNodeE);
+        }
+        for(int i=0; i<ePassengers.size();i++){
+            eNodeE = new PriorityQueueNode<>(ePassengers.get(i), calculateExitEPassengers(ePassengers.get(i), i));
+            ePassengerEntrance.insert(eNodeE);
+        }
+
+        msg = "-----Exit order-----\n";
+
+        for (int i = 0; i < ePassengers.size(); i++) {
+            EPassenger passenger = (EPassenger) ePassengerEntrance.extractMax();
+            msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + "\n";
+        }
+
+        for (int i = 0; i < nePassengers.size(); i++) {
+            NEPassenger passenger = (NEPassenger) nePassengerEntrance.extractMax();
+            msg += i + 19 + ". " + passenger.getName() + " " + passenger.getSeat() + "\n";
+        }
+
+        return msg;
+    }
+
+    public int calculateExitNEPassengers(NEPassenger passenger, int arrival){
+        int x = 0;
+
+        if(passenger.getSeat().charAt(1)=='4')x = 340;
+        else if(passenger.getSeat().charAt(1)=='5') x=300;
+        else if (passenger.getSeat().charAt(1)=='6') x=260;
+        else if (passenger.getSeat().charAt(1)=='7') x=220;
+        else if (passenger.getSeat().charAt(1)=='8') x=180;
+        else if (passenger.getSeat().charAt(1)=='9') x=140;
+
+        if(passenger.getSeat().charAt(0)=='A')x+= 60;
+        else if(passenger.getSeat().charAt(0)=='B') x+=80;
+        else if (passenger.getSeat().charAt(0)=='C') x+=100;
+        else if (passenger.getSeat().charAt(0)=='D') x+=100;
+        else if (passenger.getSeat().charAt(0)=='E') x+=80;
+        else if (passenger.getSeat().charAt(0)=='F') x+=60;
+
+        x -= arrival;
+
+        return x;
+    }
+
+    public double calculateExitEPassengers(EPassenger passenger, int arrival) {
+        double x = 0;
+
+        if(passenger.getSeat().charAt(1)=='1')x = 100;
+        else if(passenger.getSeat().charAt(1)=='2') x= 60;
+        else if (passenger.getSeat().charAt(1)=='3') x= 20;
+
+        if(passenger.getSeat().charAt(0)=='A')x+= 60;
+        else if(passenger.getSeat().charAt(0)=='B') x+=80;
+        else if (passenger.getSeat().charAt(0)=='C') x+=100;
+        else if (passenger.getSeat().charAt(0)=='D') x+=100;
+        else if (passenger.getSeat().charAt(0)=='E') x+=80;
+        else if (passenger.getSeat().charAt(0)=='F') x+=60;
+
+        x -= arrival;
+
+        return x;
     }
 
     // Archivos para guardar la información de los pasajeros
@@ -277,8 +327,7 @@ public class Airline {
        loadHashInfo();
     }
 
-    public void loadNEPassenger() throws IOException
-    {
+    public void loadNEPassenger() throws IOException {
         File file = new File(pathNE);
         FileInputStream fis = new FileInputStream(file);
         BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
@@ -293,8 +342,7 @@ public class Airline {
         fis.close();
     }
 
-    public void loadEPassenger() throws IOException
-    {
+    public void loadEPassenger() throws IOException {
         File file = new File(pathE);
         FileInputStream fis = new FileInputStream(file);
         BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
