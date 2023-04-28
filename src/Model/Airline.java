@@ -82,16 +82,6 @@ public class Airline {
     public String registerPassenger(Queue queue, Queue queueToPrint) {
         String msg = "--Orden de llegada--" + "\n\n";
         defineHow();
-        /*
-        for (int i = 0; i <= totalPassengers.size(); i++) {
-            if (totalPassengers.get(i).isExecutive()) {
-                calculateEntranceEPassengers((EPassenger) totalPassengers.get(i));
-            }
-            if (!totalPassengers.get(i).isExecutive()) {
-                calculateEntranceNEPassengers((NEPassenger) totalPassengers.get(i));
-            }
-        }
-        */
         for (int i = 1; i <= totalPassengers.size(); i++) {
             msg += registerPassengerAutomatically(queue, queueToPrint, String.valueOf(i));
         }
@@ -133,22 +123,46 @@ public class Airline {
 
         Collections.sort(totalPassengers);
     }
+
+    //Mostrarle al asistente el orden de ingreso de los pasajeros basado en lo seleccionado
+    public String showOrderEntrance() {
+        return showEntrance();
+    }
+
     private String showEntrance() {
+        String msg = "";
         ArrayList<Passenger> orderEntrance = totalPassengers;
         PriorityQueueNode neNode;
         PriorityQueueNode eNode;
-        for(int i=0;i<nePassengers.size();i++){
 
-            neNode = new PriorityQueueNode<>(totalPassengers.get(i),calculateEntranceNEPassengers((NEPassenger) totalPassengers.get(i),i));
+        for(int i=0;i<nePassengers.size();i++){
+            neNode = new PriorityQueueNode<>(nePassengers.get(i),calculateEntranceNEPassengers(nePassengers.get(i),i));
             nePassengerEntrance.insert(neNode);
         }
         for(int i=0; i<ePassengers.size();i++){
-            eNode = new PriorityQueueNode<>(totalPassengers.get(i),calculateEntranceEPassengers((EPassenger)totalPassengers.get(i),i ));
+            eNode = new PriorityQueueNode<>(ePassengers.get(i), calculateEntranceEPassengers(ePassengers.get(i), i));
             ePassengerEntrance.insert(eNode);
-
         }
 
-        return null;
+        msg = "-----Entrance order-----\n" +
+                "Executive/Disabled group\n" +
+                "Please present yourself in the respective order\n\n";
+
+        for (int i = 0; i < ePassengerEntrance.occupedSize(); i++) {
+            EPassenger passenger = (EPassenger) ePassengerEntrance.extractMax();
+            msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + "\n";
+        }
+
+        msg += "------------------------\n" +
+                "Economy group\n" +
+                "Please present yourself in the respective order\n\n";
+
+        for (int i = 0; i < nePassengerEntrance.occupedSize(); i++) {
+            NEPassenger passenger = (NEPassenger) nePassengerEntrance.extractMax();
+            msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + "\n";
+        }
+
+        return msg;
     }
     public int calculateEntranceNEPassengers(NEPassenger passenger, int arrival) {
 
@@ -169,13 +183,33 @@ public class Airline {
 
         x -= arrival;
 
-    return x;
+        return x;
     }
 
-    public int calculateEntranceEPassengers(EPassenger passenger, int arrival) {
-        int priority=0;
+    public double calculateEntranceEPassengers(EPassenger passenger, int arrival) {
+        double x = 0;
 
-        return priority;
+        if(passenger.getSeat().charAt(1)=='4')x = 20;
+        else if(passenger.getSeat().charAt(1)=='5') x=60;
+        else if (passenger.getSeat().charAt(1)=='6') x=100;
+        else if (passenger.getSeat().charAt(1)=='7') x=140;
+        else if (passenger.getSeat().charAt(1)=='8') x=180;
+        else if (passenger.getSeat().charAt(1)=='9') x=220;
+
+        if(passenger.getSeat().charAt(0)=='A')x+= 100;
+        else if(passenger.getSeat().charAt(0)=='B') x+=80;
+        else if (passenger.getSeat().charAt(0)=='C') x+=60;
+        else if (passenger.getSeat().charAt(0)=='D') x+=60;
+        else if (passenger.getSeat().charAt(0)=='E') x+=80;
+        else if (passenger.getSeat().charAt(0)=='F') x+=100;
+
+        x -= arrival;
+        x += passenger.getMiles();
+        if (passenger.isPreference()) {
+            x += 1000;
+        }
+
+        return x;
     }
 
     public int calculateMiles(double miles) {
@@ -231,13 +265,6 @@ public class Airline {
 
         return msg;
     }
-
-    //Mostrarle al asistente el orden de ingreso de los pasajeros basado en lo seleccionado
-    public String showOrderEntrance() {
-        return showEntrance();
-    }
-
-
 
     //Mostrarle al asistente el orden de salida de los pasajeros
     public String  showOrderExit()
