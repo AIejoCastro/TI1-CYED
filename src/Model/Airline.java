@@ -133,37 +133,49 @@ public class Airline {
 
         Collections.sort(totalPassengers);
     }
+    private String showEntrance() {
+        ArrayList<Passenger> orderEntrance = totalPassengers;
+        PriorityQueueNode neNode;
+        PriorityQueueNode eNode;
+        for(int i=0;i<nePassengers.size();i++){
 
-    public void calculateEntranceNEPassengers(NEPassenger passenger) {
-        int x = 0;
+            neNode = new PriorityQueueNode<>(totalPassengers.get(i),calculateEntranceNEPassengers((NEPassenger) totalPassengers.get(i),i));
+            nePassengerEntrance.insert(neNode);
+        }
+        for(int i=0; i<ePassengers.size();i++){
+            eNode = new PriorityQueueNode<>(totalPassengers.get(i),calculateEntranceEPassengers((EPassenger)totalPassengers.get(i),i ));
+            ePassengerEntrance.insert(eNode);
 
-        if(passenger.getSeat().charAt(1) == '4' || passenger.getSeat().charAt(1) == '5' || passenger.getSeat().charAt(1) == '6'){
-            x += 100;
-        } else if (passenger.getSeat().charAt(1) == '7' || passenger.getSeat().charAt(1) == '8' || passenger.getSeat().charAt(1) == '9') {
-            x += 150;
         }
 
+        return null;
+    }
+    public int calculateEntranceNEPassengers(NEPassenger passenger, int arrival) {
+
+        int x = 0;
+        if(passenger.getSeat().charAt(1)=='4')x = 20;
+        else if(passenger.getSeat().charAt(1)=='5') x=60;
+        else if (passenger.getSeat().charAt(1)=='6') x=100;
+        else if (passenger.getSeat().charAt(1)=='7') x=140;
+        else if (passenger.getSeat().charAt(1)=='8') x=180;
+        else if (passenger.getSeat().charAt(1)=='9') x=220;
+
+        if(passenger.getSeat().charAt(0)=='A')x+= 100;
+        else if(passenger.getSeat().charAt(0)=='B') x+=80;
+        else if (passenger.getSeat().charAt(0)=='C') x+=60;
+        else if (passenger.getSeat().charAt(0)=='D') x+=60;
+        else if (passenger.getSeat().charAt(0)=='E') x+=80;
+        else if (passenger.getSeat().charAt(0)=='F') x+=100;
+
+        x -= arrival;
+
+    return x;
     }
 
-    public void calculateEntranceEPassengers(EPassenger passenger) {
-        //Se inicia en 1050 debido a que estan en los primeros asientos y es ejecutivo
-        int x = 1050;
+    public int calculateEntranceEPassengers(EPassenger passenger, int arrival) {
+        int priority=0;
 
-        x += calculateMiles(passenger.getMiles());
-
-        if (passenger.isPreference()) {
-            x += 500;
-        }
-
-        if (passenger.getSeat().charAt(0) == 'A' || passenger.getSeat().charAt(1) == 'F'){
-            x += 150;
-        } else if (passenger.getSeat().charAt(0) == 'B' || passenger.getSeat().charAt(0) == 'E'){
-            x += 100;
-        } else if (passenger.getSeat().charAt(0) == 'C' || passenger.getSeat().charAt(0) == 'D') {
-            x += 50;
-        }
-
-        passenger.setEntrance(x);
+        return priority;
     }
 
     public int calculateMiles(double miles) {
@@ -225,10 +237,7 @@ public class Airline {
         return showEntrance();
     }
 
-    private String showEntrance() {
 
-        return null;
-    }
 
     //Mostrarle al asistente el orden de salida de los pasajeros
     public String  showOrderExit()
