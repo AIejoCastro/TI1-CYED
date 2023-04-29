@@ -18,9 +18,14 @@ public class Airline {
     ArrayList<NEPassenger> nePassengers;
     ArrayList<EPassenger> ePassengers;
     ArrayList<Passenger> totalPassengers;
-    private PriorityQueue ePassengerEntrance;
-    private PriorityQueue nePassengerEntrance;
+    private PriorityQueue<EPassenger,Integer> ePassengerEntrance;
+    private PriorityQueue<NEPassenger,Integer> nePassengerEntrance;
 
+    private int operationManually;
+    public Queue<NEPassenger> nEpassengersQueue;
+    public Queue<EPassenger> ePassengersQueue;
+    public Queue<NEPassenger> nEpassengersExit;
+    public Queue<EPassenger> ePassengersExit;
     private Hashtable hashtable;
 
     public Airline(){
@@ -90,6 +95,7 @@ public class Airline {
 
     private String registerPassengerAutomatically(Queue queue, Queue queueToPrint, String i) {
         String msg;
+        operationManually=0;
         if (hashtable.containsKey(i)) {
             Passenger passengerFounded = (Passenger) hashtable.search(i);
             if (passengerFounded.isExecutive()) {
@@ -130,42 +136,114 @@ public class Airline {
     }
 
     private String showEntrance() {
-        String msg = "";
-        ArrayList<Passenger> orderEntrance = totalPassengers;
+        String msg;
         PriorityQueueNode neNode;
         PriorityQueueNode eNode;
 
-        for(int i=0;i<nePassengers.size();i++){
-            neNode = new PriorityQueueNode<>(nePassengers.get(i),calculateEntranceNEPassengers(nePassengers.get(i),i + 18));
-            nePassengerEntrance.insert(neNode);
+        if(operationManually==1){
+            int c=0;
+
+            while(!nEpassengersQueue.isEmpty()){
+                c++;
+                neNode = new PriorityQueueNode<>(nEpassengersQueue.peek(),calculateEntranceNEPassengers( nEpassengersQueue.peek(),c));
+                nePassengerEntrance.insert(neNode);
+
+                nEpassengersQueue.poll();
+            }
+            int b=0;
+            while(!ePassengersQueue.isEmpty()){
+                b++;
+                eNode = new PriorityQueueNode<>(ePassengersQueue.peek(), calculateEntranceEPassengers( ePassengersQueue.peek(), b));
+                ePassengerEntrance.insert(eNode);
+
+                ePassengersQueue.poll();
+            }
+
+            msg = "-----Entrance order-----\n" +
+                    "Executive/Disabled group\n" +
+                    "Please present yourself in the respective order\n\n";
+            int ePassengerEntranceInt = ePassengerEntrance.occupedSize();
+            for (int i = 0; i < ePassengerEntranceInt; i++) {
+                EPassenger passenger =ePassengerEntrance.maximum().getElement();
+                ePassengerEntrance.extractMax();
+                if(passenger.isPreference())
+                    msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat()+ " " + "DISCAPACIDAD" + " " + "miles: " + passenger.getMiles()+ "\n";
+                else msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat()  + " " + "miles: " +passenger.getMiles()+ "\n";
+
+
+            }
+
+            msg += "------------------------\n" +
+                    "Economy group\n" +
+                    "Please present yourself in the respective order\n\n";
+
+            int ePassengerEntranceint = nePassengerEntrance.occupedSize();
+            for (int i = 0; i < ePassengerEntranceint; i++) {
+                NEPassenger passenger =nePassengerEntrance.maximum().getElement();
+                nePassengerEntrance.extractMax();
+                msg += i + ") " +passenger.getName() + " " + passenger.getSeat() + "\n";
+
+            }
+
+
+        }else{
+            ePassengersQueue = new Queue<>(18);
+            nEpassengersQueue = new Queue<>(36);
+
+            for (NEPassenger nePassenger : nePassengers) {
+                QueueNode<NEPassenger> p = new QueueNode<>(nePassenger);
+                nEpassengersQueue.offer(p);
+            }
+
+            for (EPassenger ePassenger: ePassengers){
+                QueueNode<EPassenger> p = new QueueNode<>(ePassenger);
+                ePassengersQueue.offer(p);
+            }
+            int c = 0;
+            while(!nEpassengersQueue.isEmpty()){
+                c++;
+                neNode = new PriorityQueueNode<>(nEpassengersQueue.peek(),calculateEntranceNEPassengers( nEpassengersQueue.peek(),c));
+                nePassengerEntrance.insert(neNode);
+
+                nEpassengersQueue.poll();
+            }
+            int b=0;
+            while(!ePassengersQueue.isEmpty()){
+                b++;
+                eNode = new PriorityQueueNode<>(ePassengersQueue.peek(), calculateEntranceEPassengers( ePassengersQueue.peek(), b));
+                ePassengerEntrance.insert(eNode);
+
+                ePassengersQueue.poll();
+            }
+
+            msg = "-----Entrance order-----\n" +
+                    "Executive/Disabled group\n" +
+                    "Please present yourself in the respective order\n\n";
+            int ePassengerEntranceInt = ePassengerEntrance.occupedSize();
+            for (int i = 0; i < ePassengerEntranceInt; i++) {
+                EPassenger passenger =ePassengerEntrance.maximum().getElement();
+                ePassengerEntrance.extractMax();
+                if(passenger.isPreference())
+                    msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat()+ " " + "DISCAPACIDAD" + " " + "miles: " + passenger.getMiles()+ "\n";
+                else msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat()  + " " + "miles: " +passenger.getMiles()+ "\n";
+
+
+            }
+
+            msg += "------------------------\n" +
+                    "Economy group\n" +
+                    "Please present yourself in the respective order\n\n";
+
+            int ePassengerEntranceint = nePassengerEntrance.occupedSize();
+            for (int i = 0; i < ePassengerEntranceint; i++) {
+                NEPassenger passenger =nePassengerEntrance.maximum().getElement();
+                nePassengerEntrance.extractMax();
+                msg += i + ") " +passenger.getName() + " " + passenger.getSeat() + "\n";
+
+            }
+
         }
-        for(int i=0; i<ePassengers.size();i++){
-            eNode = new PriorityQueueNode<>(ePassengers.get(i), calculateEntranceEPassengers(ePassengers.get(i), i));
-            ePassengerEntrance.insert(eNode);
-        }
 
-        msg = "-----Entrance order-----\n" +
-                "Executive/Disabled group\n" +
-                "Please present yourself in the respective order\n\n";
-
-        for (int i = 0; i < ePassengers.size(); i++) {
-            EPassenger passenger = (EPassenger) ePassengerEntrance.extractMax();
-            if(passenger.isPreference())
-            msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat()+ " " + "DISCAPACIDAD" + " " + "miles: " + passenger.getMiles()+ "\n";
-            else msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat()  + " " + "miles: " +passenger.getMiles()+ "\n";
-
-
-        }
-
-        msg += "------------------------\n" +
-                "Economy group\n" +
-                "Please present yourself in the respective order\n\n";
-
-        for (int i = 0; i < nePassengers.size(); i++) {
-            NEPassenger passenger = (NEPassenger) nePassengerEntrance.extractMax();
-
-            msg += i + ") " +passenger.getName() + " " + passenger.getSeat() +  "\n";
-        }
 
         return msg;
     }
@@ -215,17 +293,19 @@ public class Airline {
         return x;
     }
 
-    public String registerPassengerManually(String ID, Queue queue, Queue queueToPrint) {
+    public String registerPassengerManually(String ID, Queue queue, Queue queueToPrint,int x) {
 
         String msg;
-        int op = 2;
-        msg = registerPassengerManually(ID,queue,queueToPrint,2);
+
+        msg = registerPassengerManuallyP(ID,queue,queueToPrint,x);
 
         return msg;
 
     }
 
-    private String registerPassengerManually(String key,Queue queue, Queue queueToPrint, int x) {
+    private String registerPassengerManuallyP(String key,Queue queue, Queue queueToPrint, int x) {
+        operationManually = 1;
+
         String msg;
         if(hashtable.containsKey(key)){
             Passenger passengerFounded = (Passenger) hashtable.search(key);
@@ -233,7 +313,8 @@ public class Airline {
                 EPassenger exPassenger = (EPassenger) passengerFounded;
 
                 QueueNode<EPassenger> passengerQueueNode = new QueueNode<>(exPassenger);
-
+                ePassengersExit.offer(passengerQueueNode);
+                ePassengersQueue.offer(passengerQueueNode);
                 queue.offer(passengerQueueNode);
                 queueToPrint.offer(passengerQueueNode);
 
@@ -242,12 +323,16 @@ public class Airline {
             }else{
                 NEPassenger nePassenger = (NEPassenger) passengerFounded;
                 QueueNode<NEPassenger> node = new QueueNode<>(nePassenger);
+                nEpassengersQueue.offer(node);
+                nEpassengersExit.offer(node);
                 queue.offer(node);
                 queueToPrint.offer(node);
                 msg= "Name: " + node.getValue().getName() + " with ID: " + node.getValue().getId()+
                 " WAS REGISTERED SUCCESSFULLY";
             }
         }else msg = "That ID is not registered on the database";
+
+
 
         return msg;
     }
@@ -259,37 +344,105 @@ public class Airline {
 
     private String showExit() {
         String msg = "";
-        ArrayList<Passenger> orderEntrance = totalPassengers;
+
         PriorityQueueNode neNodeE;
         PriorityQueueNode eNodeE;
 
-        for(int i=0;i<nePassengers.size();i++){
-            neNodeE = new PriorityQueueNode<>(nePassengers.get(i),calculateExitNEPassengers(nePassengers.get(i), i + 18));
-            nePassengerEntrance.insert(neNodeE);
-        }
-        for(int i=0; i<ePassengers.size();i++){
-            eNodeE = new PriorityQueueNode<>(ePassengers.get(i), calculateExitEPassengers(ePassengers.get(i), i));
-            ePassengerEntrance.insert(eNodeE);
-        }
+        if(operationManually==1){
 
-        msg = "-----Exit order-----\n";
+            int nEPassengersQueueInt = nEpassengersExit.occupedSize();
 
-        for (int i = 0; i < ePassengers.size(); i++) {
-            EPassenger passenger = (EPassenger) ePassengerEntrance.extractMax();
-            if(passenger.isPreference()) {
-                msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + "Presenta discapacidad" + "\n";
+            int ePassengersQueueInt = ePassengersExit.occupedSize();
+
+            for(int i=0;i<nEPassengersQueueInt;i++){
+                neNodeE = new PriorityQueueNode<>(nEpassengersExit.peek(),calculateExitNEPassengers(nEpassengersExit.peek(), i + 18));
+                nePassengerEntrance.insert(neNodeE);
+                nEpassengersExit.poll();
+            }
+
+            for(int i=0; i<ePassengersQueueInt;i++){
+                eNodeE = new PriorityQueueNode<>(ePassengersExit.peek(), calculateExitEPassengers(ePassengersExit.peek(), i));
+                ePassengerEntrance.insert(eNodeE);
+                ePassengersExit.poll();
+            }
+
+            msg = "-----Exit order-----\n";
+
+            int passEExit = ePassengerEntrance.occupedSize();
+            int passNExit = nePassengerEntrance.occupedSize();
+
+
+            for (int i = 0; i < passEExit; i++) {
+                EPassenger passenger =ePassengerEntrance.maximum().getElement();
+                ePassengerEntrance.extractMax();
+                if(passenger.isPreference()) {
+                    msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + " | Presenta discapacidad |" + "\n";
+
+                }
+                else {
+                    msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + " | No presenta discapacidad |"+"\n";
+
+                }
+
 
             }
-            else {
-                msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + "No presenta discapacidad"+"\n";
+            msg += "-----Exit order non executive-----\n";
 
+            for (int i = 0; i < passNExit; i++) {
+                NEPassenger passenger =nePassengerEntrance.maximum().getElement();
+                nePassengerEntrance.extractMax();
+                msg += i+1 + ". " + passenger.getName() + " " + passenger.getSeat() +  " | No presenta discapacidad | "+ "\n";
+
+            }
+        }else{
+            ePassengersQueue = new Queue<>(18);
+            nEpassengersQueue = new Queue<>(36);
+
+            for (NEPassenger nePassenger : nePassengers) {
+                QueueNode<NEPassenger> p = new QueueNode<>(nePassenger);
+                nEpassengersQueue.offer(p);
+            }
+            int nEPassengersQueueInt = nEpassengersQueue.occupedSize();
+            for (EPassenger ePassenger: ePassengers){
+                QueueNode<EPassenger> p = new QueueNode<>(ePassenger);
+                ePassengersQueue.offer(p);
+            }
+            int ePassengersQueueInt = ePassengersQueue.occupedSize();
+
+            for(int i=0;i<nEPassengersQueueInt;i++){
+                neNodeE = new PriorityQueueNode<>(nEpassengersQueue.peek(),calculateExitNEPassengers(nEpassengersQueue.peek(), i + 18));
+                nePassengerEntrance.insert(neNodeE);
+                nEpassengersQueue.poll();
+            }
+
+            for(int i=0; i<ePassengersQueueInt;i++){
+                eNodeE = new PriorityQueueNode<>(ePassengersQueue.peek(), calculateExitEPassengers(ePassengersQueue.peek(), i));
+                ePassengerEntrance.insert(eNodeE);
+                ePassengersQueue.poll();
+            }
+
+            msg = "-----Exit order-----\n";
+
+            for (int i = 0; i < ePassengersQueueInt; i++) {
+                EPassenger passenger =ePassengerEntrance.maximum().getElement();
+                ePassengerEntrance.extractMax();
+                if(passenger.isPreference()) {
+                    msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + "Presenta discapacidad" + "\n";
+
+                }
+                else {
+                    msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + "No presenta discapacidad"+"\n";
+
+                }
+            }
+
+            for (int i = 0; i < nEPassengersQueueInt; i++) {
+                NEPassenger passenger =nePassengerEntrance.maximum().getElement();
+                nePassengerEntrance.extractMax();
+                msg += i + 19 + ". " + passenger.getName() + " " + passenger.getSeat() + "\n";
             }
         }
 
-        for (int i = 0; i < nePassengers.size(); i++) {
-            NEPassenger passenger = (NEPassenger) nePassengerEntrance.extractMax();
-            msg += i + 19 + ". " + passenger.getName() + " " + passenger.getSeat() + "\n";
-        }
 
         return msg;
     }
@@ -375,10 +528,20 @@ public class Airline {
 
     public String printQueue(Queue queue, Queue queueToPrint){
         String msg = "";
-        for (int i=0 ; i< queue.size();i++){
-            msg += queueToPrint.peek() + "\n";
-            queueToPrint.poll();
+
+
+            for (int i=0 ; i< queue.size();i++){
+                msg += queueToPrint.peek() + "\n";
+
+                queueToPrint.poll();
+            }
+
+
+
+
+
+            return msg;
         }
-        return msg;
-    }
+
+
 }

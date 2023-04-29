@@ -12,6 +12,7 @@ public class Main {
     private Queue queue;
     private Queue queueToPrint;
 
+    private int tryy =0;
 
     public static void main(String[] args) throws IOException {
 
@@ -43,7 +44,7 @@ public class Main {
                    "3.Select the manually who is entering the airline "  + "\n"+
                    "4.Show the entrance" + "\n" +
                    "5.Show the exit" + "\n" +
-                   "9.Print queue" + "\n" +
+                   "9.Print queue (You can see the queue only one time) "  + "\n" +
                    "0.Exit");
 
            option = sc.nextInt();
@@ -56,10 +57,12 @@ public class Main {
                    break;
                case 2:
                    //Ya
+                   System.out.println("");
+                   System.out.println("Please remember this command can be executed only once");
                    registerPassengerAutomatically();
                    break;
                case 3:
-                   //FALTA
+                   //Ya
                    registerPassengersManually();
                    break;
                case 4:
@@ -75,7 +78,7 @@ public class Main {
                    System.out.println("Exiting the program...");
                    break;
                case 9:
-                   //Ya
+                   tryy++;
                    printQueue();
                    break;
                default:
@@ -92,20 +95,25 @@ public class Main {
     }
 
     private void printQueue() {
+
             System.out.println(avianca.printQueue(queue,queueToPrint));
     }
 
     private void registerPassengersManually() {
-        String IDperson= "";
-        System.out.println("Enter the number of people that is coming to the airline: " + "\n");
+        String IDperson;
+        System.out.println("Enter the number of people that confirmed the trip: " + "\n");
         int ite = sc.nextInt();
+        avianca.ePassengersQueue = new Queue<>(ite);
+        avianca.nEpassengersQueue = new Queue<>(ite);
+        avianca.ePassengersExit = new Queue<>(ite);
+        avianca.nEpassengersExit = new Queue<>(ite);
         queue = new Queue<>(ite);
-        queueToPrint= new Queue<>(ite);
+        queueToPrint = new Queue<>(ite);
         sc.nextLine();
         for(int i =0; i<ite;i++){
             System.out.println("Please enter the ID of the " + (i+1) +" person that arrived" + "\n");
             IDperson = sc.nextLine();
-            System.out.println(avianca.registerPassengerManually(IDperson,queue,queueToPrint));
+            System.out.println(avianca.registerPassengerManually(IDperson,queue,queueToPrint,ite));
         }
     }
 
