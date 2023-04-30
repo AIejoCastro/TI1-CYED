@@ -213,4 +213,13 @@ public class PriorityQueueTest {
         assertEquals("C", queue.extractMax());
         assertEquals("D", queue.extractMax());
     }
+
+    //Limites
+    public void quickSortMajorMinorLimitTest() {
+        PriorityQueue<Integer, Integer> queue = new PriorityQueue<>(1);
+        queue.insert(new PriorityQueueNode<>(1, 10));
+        queue.quickSortMajorMinor(0);
+        assertEquals((Integer) 1, queue.extractMin());
+
+    }
 }
