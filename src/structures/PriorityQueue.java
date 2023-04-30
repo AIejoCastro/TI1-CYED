@@ -8,14 +8,6 @@ public class PriorityQueue<E, K extends Comparable<K>> implements IPriorityQueue
         this.priorityQueue = new PriorityQueueNode[size];
     }
 
-    public PriorityQueueNode<E, K>[] getPriorityQueue() {
-        return priorityQueue;
-    }
-
-    public void setPriorityQueue(PriorityQueueNode<E, K>[] priorityQueue) {
-        this.priorityQueue = priorityQueue;
-    }
-
     @Override
     public void delete(int index){
 

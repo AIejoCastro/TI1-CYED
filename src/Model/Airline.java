@@ -376,11 +376,11 @@ public class Airline {
                 EPassenger passenger =ePassengerEntrance.maximum().getElement();
                 ePassengerEntrance.extractMax();
                 if(passenger.isPreference()) {
-                    msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + " | Presenta discapacidad |" + "\n";
+                    msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + " " + " | Presenta discapacidad |" + "\n";
 
                 }
                 else {
-                    msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + " | No presenta discapacidad |"+"\n";
+                    msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + " " + " | No presenta discapacidad |"+"\n";
 
                 }
 
@@ -391,7 +391,7 @@ public class Airline {
             for (int i = 0; i < passNExit; i++) {
                 NEPassenger passenger =nePassengerEntrance.maximum().getElement();
                 nePassengerEntrance.extractMax();
-                msg += i+1 + ". " + passenger.getName() + " " + passenger.getSeat() +  " | No presenta discapacidad | "+ "\n";
+                msg += i+1 + ". " + passenger.getName() + " " + passenger.getSeat() +  " " + " | No presenta discapacidad | "+ "\n";
 
             }
         }else{
@@ -427,11 +427,11 @@ public class Airline {
                 EPassenger passenger =ePassengerEntrance.maximum().getElement();
                 ePassengerEntrance.extractMax();
                 if(passenger.isPreference()) {
-                    msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + "Presenta discapacidad" + "\n";
+                    msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + " Presenta discapacidad" + "\n";
 
                 }
                 else {
-                    msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + "No presenta discapacidad"+"\n";
+                    msg += i + 1 + ". " + passenger.getName() + " " + passenger.getSeat() + " No presenta discapacidad"+"\n";
 
                 }
             }
