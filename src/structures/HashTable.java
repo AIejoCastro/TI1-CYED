@@ -8,14 +8,13 @@ public class HashTable<K,V> {
 	}
 	public int hash(K k){
 		int keyToHash = k.hashCode();
-		return keyToHash% PASSENGER_QUANTITY;
+		return keyToHash % PASSENGER_QUANTITY;
 	}
 	public void insertOnHashTable(K key, V value){
 		int hashPosition = hash(key);
 		NodeHashTable<K,V> nodeToInsert = new NodeHashTable<>(key, value);
 		
-		if(hashtable[hashPosition] != null)
-		{
+		if(hashtable[hashPosition] != null) {
 			hashtable[hashPosition].insertNodeHT(nodeToInsert);
 		} else{
 

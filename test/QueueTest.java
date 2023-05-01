@@ -167,7 +167,7 @@ public class QueueTest {
         queue.enqueue("C");
 
         queue.dequeue();
-        
+
         assertEquals("B", queue.getHead().getItem());
     }
 }
