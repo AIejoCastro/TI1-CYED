@@ -48,16 +48,6 @@ public class PriorityQueue<E, K extends Comparable<K>> implements IPriorityQueue
     }
 
     @Override
-    public PriorityQueueNode<E, K> minimum() {
-        if(priorityQueue.length>0){
-            quickSortMinorMajor(0);
-            return priorityQueue[0];
-        } else {
-            return null;
-        }
-    }
-
-    @Override
     public E extractMax() {
         quickSortMajorMinor(0);
 
@@ -66,35 +56,11 @@ public class PriorityQueue<E, K extends Comparable<K>> implements IPriorityQueue
         if(isEmpty()){
             return null;
         } else {
-            int occupied = occupedSize();
+            int occupied = occupiedSize();
             element = priorityQueue[0].getElement();
             priorityQueue[0] = null;
 
             for (int i = 0; i <= occupied-1; i++) {
-                if(i==occupied-1){
-                    priorityQueue[i] = null;
-                } else {
-                    priorityQueue[i] = priorityQueue[i+1];
-                }
-            }
-        }
-        return element;
-    }
-
-    @Override
-    public E extractMin() {
-        quickSortMinorMajor(0);
-
-        E element;
-
-        if(isEmpty()){
-            return null;
-        } else {
-            int occupied = occupedSize();
-            element = priorityQueue[0].getElement();
-            priorityQueue[0] = null;
-
-            for (int i = 0; i < occupied-1; i++) {
                 if(i==occupied-1){
                     priorityQueue[i] = null;
                 } else {
@@ -198,44 +164,6 @@ public class PriorityQueue<E, K extends Comparable<K>> implements IPriorityQueue
         quickSortMinorMajor(elemDer + 1, fin);
     } // quicksort for priority queue (minor to major)
 
-    @Override
-    public boolean increaseKey(E element, K key) {
-
-        for (int i = 0; i < priorityQueue.length; i++) {
-
-            if(priorityQueue[i].getElement().equals(element)){
-
-                if(priorityQueue[i].getKey().compareTo(key) >= 0){
-                    return false;
-                } else {
-                    priorityQueue[i].setKey(key);
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    } // increase key
-
-    @Override
-    public boolean decreaseKey(E element, K key) {
-
-        for (int i = 0; i < priorityQueue.length; i++) {
-
-            if(priorityQueue[i].getElement().equals(element)){
-
-                if(priorityQueue[i].getKey().compareTo(key) <= 0){
-                    return false;
-                } else {
-                    priorityQueue[i].setKey(key);
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    } // decrease key
-
     public boolean isEmpty() {
 
         if(priorityQueue.length==0){
@@ -249,7 +177,7 @@ public class PriorityQueue<E, K extends Comparable<K>> implements IPriorityQueue
         }
     } // Is empty
 
-    public int occupedSize(){
+    public int occupiedSize(){
 
         int size = 0;
 

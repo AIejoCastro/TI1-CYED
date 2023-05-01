@@ -162,7 +162,7 @@ public class Airline {
             msg = "-----Entrance order-----\n" +
                     "Executive/Disabled group\n" +
                     "Please present yourself in the respective order\n\n";
-            int ePassengerEntranceInt = ePassengerEntrance.occupedSize();
+            int ePassengerEntranceInt = ePassengerEntrance.occupiedSize();
             for (int i = 0; i < ePassengerEntranceInt; i++) {
                 EPassenger passenger =ePassengerEntrance.maximum().getElement();
                 ePassengerEntrance.extractMax();
@@ -177,7 +177,7 @@ public class Airline {
                     "Economy group\n" +
                     "Please present yourself in the respective order\n\n";
 
-            int ePassengerEntranceint = nePassengerEntrance.occupedSize();
+            int ePassengerEntranceint = nePassengerEntrance.occupiedSize();
             for (int i = 0; i < ePassengerEntranceint; i++) {
                 NEPassenger passenger =nePassengerEntrance.maximum().getElement();
                 nePassengerEntrance.extractMax();
@@ -219,7 +219,7 @@ public class Airline {
             msg = "-----Entrance order-----\n" +
                     "Executive/Disabled group\n" +
                     "Please present yourself in the respective order\n\n";
-            int ePassengerEntranceInt = ePassengerEntrance.occupedSize();
+            int ePassengerEntranceInt = ePassengerEntrance.occupiedSize();
             for (int i = 0; i < ePassengerEntranceInt; i++) {
                 EPassenger passenger =ePassengerEntrance.maximum().getElement();
                 ePassengerEntrance.extractMax();
@@ -234,7 +234,7 @@ public class Airline {
                     "Economy group\n" +
                     "Please present yourself in the respective order\n\n";
 
-            int ePassengerEntranceint = nePassengerEntrance.occupedSize();
+            int ePassengerEntranceint = nePassengerEntrance.occupiedSize();
             for (int i = 0; i < ePassengerEntranceint; i++) {
                 NEPassenger passenger =nePassengerEntrance.maximum().getElement();
                 nePassengerEntrance.extractMax();
@@ -368,8 +368,8 @@ public class Airline {
 
             msg = "-----Exit order-----\n";
 
-            int passEExit = ePassengerEntrance.occupedSize();
-            int passNExit = nePassengerEntrance.occupedSize();
+            int passEExit = ePassengerEntrance.occupiedSize();
+            int passNExit = nePassengerEntrance.occupiedSize();
 
 
             for (int i = 0; i < passEExit; i++) {
@@ -528,20 +528,11 @@ public class Airline {
 
     public String printQueue(Queue queue, Queue queueToPrint){
         String msg = "";
-
-
             for (int i=0 ; i< queue.size();i++){
                 msg += queueToPrint.getHead().getItem() + "\n";
 
                 queueToPrint.dequeue();
             }
-
-
-
-
-
             return msg;
         }
-
-
 }
