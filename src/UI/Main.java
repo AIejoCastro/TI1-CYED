@@ -103,12 +103,12 @@ public class Main {
         String IDperson;
         System.out.println("Enter the number of people that confirmed the trip: " + "\n");
         int ite = sc.nextInt();
-        avianca.ePassengersQueue = new Queue<>(ite);
-        avianca.nEpassengersQueue = new Queue<>(ite);
-        avianca.ePassengersExit = new Queue<>(ite);
-        avianca.nEpassengersExit = new Queue<>(ite);
-        queue = new Queue<>(ite);
-        queueToPrint = new Queue<>(ite);
+        avianca.ePassengersQueue = new Queue<>();
+        avianca.nEpassengersQueue = new Queue<>();
+        avianca.ePassengersExit = new Queue<>();
+        avianca.nEpassengersExit = new Queue<>();
+        queue = new Queue<>();
+        queueToPrint = new Queue<>();
         sc.nextLine();
         for(int i =0; i<ite;i++){
             System.out.println("Please enter the ID of the " + (i+1) +" person that arrived" + "\n");
@@ -118,8 +118,8 @@ public class Main {
     }
 
     private void registerPassengerAutomatically() {
-        queue = new Queue<>(54);
-        queueToPrint = new Queue<>(54);
+        queue = new Queue<>();
+        queueToPrint = new Queue<>();
         System.out.println(avianca.registerPassenger(queue, queueToPrint));
     }
 

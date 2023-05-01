@@ -26,13 +26,13 @@ public class Airline {
     public Queue<EPassenger> ePassengersQueue;
     public Queue<NEPassenger> nEpassengersExit;
     public Queue<EPassenger> ePassengersExit;
-    private Hashtable hashtable;
+    private HashTable hashtable;
 
     public Airline(){
         ePassengers = new ArrayList<>();
         nePassengers = new ArrayList<>();
         totalPassengers= new ArrayList<>();
-        hashtable = new Hashtable(54);
+        hashtable = new HashTable();
         ePassengerEntrance = new PriorityQueue(18);
         nePassengerEntrance = new PriorityQueue(36);
 
@@ -41,7 +41,7 @@ public class Airline {
     public String searchPassengerInformation(String key) {
         String msg = "";
 
-        Passenger passengerFounded = (Passenger) hashtable.search(key);
+        Passenger passengerFounded = (Passenger) hashtable.searchOnHashTable(key);
         if (passengerFounded == null) return msg = "THERE'S NO USER WITH THAT IDENTIFICATION";
         else {
 
@@ -71,14 +71,14 @@ public class Airline {
     private void loadHashInfo() {
 
         for(int i=0; i<nePassengers.size();i++){
-            HashtableNode passengerNE = new HashtableNode<>(nePassengers.get(i).getId(),nePassengers.get(i));
-            hashtable.insert(passengerNE,nePassengers.get(i).getId());
+
+            hashtable.insertOnHashTable(nePassengers.get(i).getId(),nePassengers.get(i));
 
         }
 
         for(int j=0;j<ePassengers.size();j++){
-            HashtableNode passengerE = new HashtableNode<>(ePassengers.get(j).getId(),ePassengers.get(j));
-            hashtable.insert(passengerE,ePassengers.get(j).getId());
+
+            hashtable.insertOnHashTable(ePassengers.get(j).getId(),ePassengers.get(j));
 
         }
     }
@@ -93,24 +93,24 @@ public class Airline {
         return msg;
     }
 
-    private String registerPassengerAutomatically(Queue queue, Queue queueToPrint, String i) {
+    private String registerPassengerAutomatically(Queue queue, Queue queueToPrint, String key) {
         String msg;
         operationManually=0;
-        if (hashtable.containsKey(i)) {
-            Passenger passengerFounded = (Passenger) hashtable.search(i);
+        if (hashtable.searchOnHashTable(key)!=null) {
+            Passenger passengerFounded = (Passenger) hashtable.searchOnHashTable(key);
             if (passengerFounded.isExecutive()) {
                 EPassenger exPassenger = (EPassenger) passengerFounded;
-                QueueNode<EPassenger> passengerQueueNode = new QueueNode<>(exPassenger);
-                queue.offer(passengerQueueNode);
-                queueToPrint.offer(passengerQueueNode);
-                msg = "Name: " + passengerQueueNode.getValue().getName() + " with ID: " + passengerQueueNode.getValue().getId()+
+                Node <EPassenger> passengerQueueNode = new Node<>(exPassenger);
+                queue.enqueue(passengerQueueNode);
+                queueToPrint.enqueue(passengerQueueNode);
+                msg = "Name: " + passengerQueueNode.getItem().getName() + " with ID: " + passengerQueueNode.getItem().getId()+
                         " WAS REGISTERED SUCCESSFULLY\n";
             } else {
                 NEPassenger nePassenger = (NEPassenger) passengerFounded;
-                QueueNode<NEPassenger> node = new QueueNode<>(nePassenger);
-                queue.offer(node);
-                queueToPrint.offer(node);
-                msg = "Name: " + node.getValue().getName() + " with ID: " + node.getValue().getId()+
+                Node <NEPassenger> node = new Node<>(nePassenger);
+                queue.enqueue(node);
+                queueToPrint.enqueue(node);
+                msg = "Name: " + node.getItem().getName() + " with ID: " + node.getItem().getId()+
                         " WAS REGISTERED SUCCESSFULLY\n";
             }
         }else msg = "That ID is not registered on the database\n";
@@ -145,18 +145,18 @@ public class Airline {
 
             while(!nEpassengersQueue.isEmpty()){
                 c++;
-                neNode = new PriorityQueueNode<>(nEpassengersQueue.peek(),calculateEntranceNEPassengers( nEpassengersQueue.peek(),c));
+                neNode = new PriorityQueueNode<>(nEpassengersQueue.getHead().getItem(),calculateEntranceNEPassengers( nEpassengersQueue.getHead().getItem(),c));
                 nePassengerEntrance.insert(neNode);
 
-                nEpassengersQueue.poll();
+                nEpassengersQueue.dequeue();
             }
             int b=0;
             while(!ePassengersQueue.isEmpty()){
                 b++;
-                eNode = new PriorityQueueNode<>(ePassengersQueue.peek(), calculateEntranceEPassengers( ePassengersQueue.peek(), b));
+                eNode = new PriorityQueueNode<>(ePassengersQueue.getHead().getItem(), calculateEntranceEPassengers( ePassengersQueue.getHead().getItem(), b));
                 ePassengerEntrance.insert(eNode);
 
-                ePassengersQueue.poll();
+                ePassengersQueue.dequeue();
             }
 
             msg = "-----Entrance order-----\n" +
@@ -187,33 +187,33 @@ public class Airline {
 
 
         }else{
-            ePassengersQueue = new Queue<>(18);
-            nEpassengersQueue = new Queue<>(36);
+            ePassengersQueue = new Queue<>();
+            nEpassengersQueue = new Queue<>();
 
             for (NEPassenger nePassenger : nePassengers) {
-                QueueNode<NEPassenger> p = new QueueNode<>(nePassenger);
-                nEpassengersQueue.offer(p);
+                Node<NEPassenger> p = new Node<>(nePassenger);
+                nEpassengersQueue.enqueue(p.getItem());
             }
 
             for (EPassenger ePassenger: ePassengers){
-                QueueNode<EPassenger> p = new QueueNode<>(ePassenger);
-                ePassengersQueue.offer(p);
+                Node<EPassenger> p = new Node<>(ePassenger);
+                ePassengersQueue.enqueue(p.getItem());
             }
             int c = 0;
             while(!nEpassengersQueue.isEmpty()){
                 c++;
-                neNode = new PriorityQueueNode<>(nEpassengersQueue.peek(),calculateEntranceNEPassengers( nEpassengersQueue.peek(),c));
+                neNode = new PriorityQueueNode<>(nEpassengersQueue.getHead().getItem(),calculateEntranceNEPassengers( nEpassengersQueue.getHead().getItem(),c));
                 nePassengerEntrance.insert(neNode);
 
-                nEpassengersQueue.poll();
+                nEpassengersQueue.dequeue();
             }
             int b=0;
             while(!ePassengersQueue.isEmpty()){
                 b++;
-                eNode = new PriorityQueueNode<>(ePassengersQueue.peek(), calculateEntranceEPassengers( ePassengersQueue.peek(), b));
+                eNode = new PriorityQueueNode<>(ePassengersQueue.getHead().getItem(), calculateEntranceEPassengers( ePassengersQueue.getHead().getItem(), b));
                 ePassengerEntrance.insert(eNode);
 
-                ePassengersQueue.poll();
+                ePassengersQueue.dequeue();
             }
 
             msg = "-----Entrance order-----\n" +
@@ -293,7 +293,7 @@ public class Airline {
         return x;
     }
 
-    public String registerPassengerManually(String ID, Queue queue, Queue queueToPrint,int x) {
+    public String registerPassengerManually(String ID, Queue queue, Queue queueToPrint, int x) {
 
         String msg;
 
@@ -303,31 +303,31 @@ public class Airline {
 
     }
 
-    private String registerPassengerManuallyP(String key,Queue queue, Queue queueToPrint, int x) {
+    private String registerPassengerManuallyP(String key, Queue queue, Queue queueToPrint, int x) {
         operationManually = 1;
 
         String msg;
-        if(hashtable.containsKey(key)){
-            Passenger passengerFounded = (Passenger) hashtable.search(key);
+        if(hashtable.searchOnHashTable(key)!=null){
+            Passenger passengerFounded = (Passenger) hashtable.searchOnHashTable(key);
             if(passengerFounded.isExecutive()){
                 EPassenger exPassenger = (EPassenger) passengerFounded;
 
-                QueueNode<EPassenger> passengerQueueNode = new QueueNode<>(exPassenger);
-                ePassengersExit.offer(passengerQueueNode);
-                ePassengersQueue.offer(passengerQueueNode);
-                queue.offer(passengerQueueNode);
-                queueToPrint.offer(passengerQueueNode);
+                Node<EPassenger> passengerQueueNode = new Node<>(exPassenger);
+                ePassengersExit.enqueue(passengerQueueNode.getItem());
+                ePassengersQueue.enqueue(passengerQueueNode.getItem());
+                queue.enqueue(passengerQueueNode);
+                queueToPrint.enqueue(passengerQueueNode);
 
-                msg= "Name: " + passengerQueueNode.getValue().getName() + " with ID: " + passengerQueueNode.getValue().getId()+
+                msg= "Name: " + passengerQueueNode.getItem().getName() + " with ID: " + passengerQueueNode.getItem().getId()+
                 " WAS REGISTERED SUCCESSFULLY";
             }else{
                 NEPassenger nePassenger = (NEPassenger) passengerFounded;
-                QueueNode<NEPassenger> node = new QueueNode<>(nePassenger);
-                nEpassengersQueue.offer(node);
-                nEpassengersExit.offer(node);
-                queue.offer(node);
-                queueToPrint.offer(node);
-                msg= "Name: " + node.getValue().getName() + " with ID: " + node.getValue().getId()+
+                Node<NEPassenger> node = new Node<>(nePassenger);
+                nEpassengersQueue.enqueue(node.getItem());
+                nEpassengersExit.enqueue(node.getItem());
+                queue.enqueue(node);
+                queueToPrint.enqueue(node);
+                msg= "Name: " + node.getItem().getName() + " with ID: " + node.getItem().getId()+
                 " WAS REGISTERED SUCCESSFULLY";
             }
         }else msg = "That ID is not registered on the database";
@@ -350,20 +350,20 @@ public class Airline {
 
         if(operationManually==1){
 
-            int nEPassengersQueueInt = nEpassengersExit.occupedSize();
+            int nEPassengersQueueInt = nEpassengersExit.size();
 
-            int ePassengersQueueInt = ePassengersExit.occupedSize();
+            int ePassengersQueueInt = ePassengersExit.size();
 
             for(int i=0;i<nEPassengersQueueInt;i++){
-                neNodeE = new PriorityQueueNode<>(nEpassengersExit.peek(),calculateExitNEPassengers(nEpassengersExit.peek(), i + 18));
+                neNodeE = new PriorityQueueNode<>(nEpassengersExit.getHead().getItem(),calculateExitNEPassengers(nEpassengersExit.getHead().getItem(), i + 18));
                 nePassengerEntrance.insert(neNodeE);
-                nEpassengersExit.poll();
+                nEpassengersExit.dequeue();
             }
 
             for(int i=0; i<ePassengersQueueInt;i++){
-                eNodeE = new PriorityQueueNode<>(ePassengersExit.peek(), calculateExitEPassengers(ePassengersExit.peek(), i));
+                eNodeE = new PriorityQueueNode<>(ePassengersExit.getHead().getItem(), calculateExitEPassengers(ePassengersExit.getHead().getItem(), i));
                 ePassengerEntrance.insert(eNodeE);
-                ePassengersExit.poll();
+                ePassengersExit.dequeue();
             }
 
             msg = "-----Exit order-----\n";
@@ -395,30 +395,30 @@ public class Airline {
 
             }
         }else{
-            ePassengersQueue = new Queue<>(18);
-            nEpassengersQueue = new Queue<>(36);
+            ePassengersQueue = new Queue<>();
+            nEpassengersQueue = new Queue<>();
 
             for (NEPassenger nePassenger : nePassengers) {
-                QueueNode<NEPassenger> p = new QueueNode<>(nePassenger);
-                nEpassengersQueue.offer(p);
+                Node<NEPassenger> p = new Node<>(nePassenger);
+                nEpassengersQueue.enqueue(p.getItem());
             }
-            int nEPassengersQueueInt = nEpassengersQueue.occupedSize();
+            int nEPassengersQueueInt = nEpassengersQueue.size();
             for (EPassenger ePassenger: ePassengers){
-                QueueNode<EPassenger> p = new QueueNode<>(ePassenger);
-                ePassengersQueue.offer(p);
+                Node<EPassenger> p = new Node<>(ePassenger);
+                ePassengersQueue.enqueue(p.getItem());
             }
-            int ePassengersQueueInt = ePassengersQueue.occupedSize();
+            int ePassengersQueueInt = ePassengersQueue.size();
 
             for(int i=0;i<nEPassengersQueueInt;i++){
-                neNodeE = new PriorityQueueNode<>(nEpassengersQueue.peek(),calculateExitNEPassengers(nEpassengersQueue.peek(), i + 18));
+                neNodeE = new PriorityQueueNode<>(nEpassengersQueue.getHead().getItem(),calculateExitNEPassengers(nEpassengersQueue.getHead().getItem(), i + 18));
                 nePassengerEntrance.insert(neNodeE);
-                nEpassengersQueue.poll();
+                nEpassengersQueue.dequeue();
             }
 
             for(int i=0; i<ePassengersQueueInt;i++){
-                eNodeE = new PriorityQueueNode<>(ePassengersQueue.peek(), calculateExitEPassengers(ePassengersQueue.peek(), i));
+                eNodeE = new PriorityQueueNode<>(ePassengersQueue.getHead().getItem(), calculateExitEPassengers(ePassengersQueue.getHead().getItem(), i));
                 ePassengerEntrance.insert(eNodeE);
-                ePassengersQueue.poll();
+                ePassengersQueue.dequeue();
             }
 
             msg = "-----Exit order-----\n";
@@ -531,9 +531,9 @@ public class Airline {
 
 
             for (int i=0 ; i< queue.size();i++){
-                msg += queueToPrint.peek() + "\n";
+                msg += queueToPrint.getHead().getItem() + "\n";
 
-                queueToPrint.poll();
+                queueToPrint.dequeue();
             }
 
 
