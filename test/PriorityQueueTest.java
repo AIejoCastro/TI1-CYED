@@ -142,7 +142,7 @@ public class PriorityQueueTest {
         queue.insert(new PriorityQueueNode<>("C", 2));
         queue.insert(new PriorityQueueNode<>("D", 1));
         queue.insert(new PriorityQueueNode<>("E", 4));
-        queue.quickSortMajorMinor(0, 4);
+        queue.sortGrMin(0, 4);
         assertEquals("B", queue.extractMax());
         assertEquals("E", queue.extractMax());
         assertEquals("A", queue.extractMax());
@@ -155,7 +155,7 @@ public class PriorityQueueTest {
     public void quickSortMajorMinorLimitTest() {
         PriorityQueue<String, Integer> queue = new PriorityQueue<>(1);
         queue.insert(new PriorityQueueNode<>("A", 10));
-        queue.quickSortMajorMinor(0);
+        queue.sortGrMin(0);
         assertEquals("A", queue.extractMax());
         assertNull(queue.extractMax());
     }
@@ -169,7 +169,7 @@ public class PriorityQueueTest {
         queue.insert(new PriorityQueueNode<>("C", 1));
         queue.insert(new PriorityQueueNode<>("D", 5));
         queue.insert(new PriorityQueueNode<>("E", 3));
-        queue.quickSortMajorMinor(0);
+        queue.sortGrMin(0);
         assertEquals("D", queue.extractMax());
         assertEquals("B", queue.extractMax());
     }
@@ -183,7 +183,7 @@ public class PriorityQueueTest {
         queue.insert(new PriorityQueueNode<>("C", 2));
         queue.insert(new PriorityQueueNode<>("D", 1));
         queue.insert(new PriorityQueueNode<>("E", 4));
-        queue.quickSortMinorMajor(0, 4);
+        queue.sortMinGr(0, 4);
         assertEquals("B", queue.extractMax());
         assertEquals("E", queue.extractMax());
         assertEquals("A", queue.extractMax());
@@ -196,7 +196,7 @@ public class PriorityQueueTest {
     public void quickSortMinorMajorLimitTest() {
         PriorityQueue<String, Integer> queue = new PriorityQueue<>(1);
         queue.insert(new PriorityQueueNode<>("A", 10));
-        queue.quickSortMinorMajor(0);
+        queue.sortMinGr(0);
         assertEquals("A", queue.extractMax());
         assertNull(queue.extractMax());
     }
@@ -210,7 +210,7 @@ public class PriorityQueueTest {
         queue.insert(new PriorityQueueNode<>("C", 5));
         queue.insert(new PriorityQueueNode<>("D", 5));
         queue.insert(new PriorityQueueNode<>("E", 3));
-        queue.quickSortMinorMajor(0);
+        queue.sortMinGr(0);
         assertEquals("C", queue.extractMax());
         assertEquals("D", queue.extractMax());
     }

@@ -8,20 +8,7 @@ public class PriorityQueue<E, K extends Comparable<K>> implements IPriorityQueue
         this.priorityQueue = new PriorityQueueNode[size];
     }
 
-    @Override
-    public void delete(int index){
 
-        if(isEmpty()){
-            return;
-        } else {
-            priorityQueue[index] = null; // 1
-
-            for (int i = index; i < priorityQueue.length-1; i++) {
-
-                priorityQueue[i] = priorityQueue[i+1];
-            }
-        }
-    }
 
     @Override
     public boolean insert(PriorityQueueNode<E, K> node) {
@@ -39,7 +26,7 @@ public class PriorityQueue<E, K extends Comparable<K>> implements IPriorityQueue
     @Override
     public PriorityQueueNode<E, K> maximum() {
         if(priorityQueue.length>0){
-            quickSortMajorMinor(0 );
+            sortGrMin(0 );
             return priorityQueue[0];
         } else {
             return null;
@@ -49,7 +36,7 @@ public class PriorityQueue<E, K extends Comparable<K>> implements IPriorityQueue
 
     @Override
     public E extractMax() {
-        quickSortMajorMinor(0);
+        sortGrMin(0);
 
         E element;
 
@@ -71,7 +58,53 @@ public class PriorityQueue<E, K extends Comparable<K>> implements IPriorityQueue
         return element;
     }
 
-    public void quickSortMajorMinor(int inicio){
+    public void sortGrMin(int start){
+        int end = 0;
+
+        for (int i = 0; i < priorityQueue.length; i++) {
+            if(priorityQueue[i]==null){
+                end = i-1;
+                break;
+            } else if(i==priorityQueue.length-1){
+                end = priorityQueue.length-1;
+            }
+        }
+
+        sortGrMin(start, end);
+    }
+
+    public void sortGrMin(int beggining, int end) {
+
+        if (beggining >= end) return;
+        PriorityQueueNode<E,K> piv = priorityQueue[beggining];
+        int leftElement = beggining + 1;
+        int rightElement = end;
+
+        while (leftElement <= rightElement) {
+            while (leftElement <= end && (priorityQueue[leftElement].compareTo(piv.getKey())) >= 0)  {
+                leftElement++;
+            }
+            while (rightElement > beggining && (priorityQueue[rightElement].compareTo(piv.getKey())) < 0) {
+                rightElement--;
+            }
+            if (leftElement < rightElement) {
+                PriorityQueueNode<E, K> temp = priorityQueue[leftElement];
+                priorityQueue[leftElement] = priorityQueue[rightElement];
+                priorityQueue[rightElement] = temp;
+            }
+        }
+
+        if (rightElement > beggining) {
+            PriorityQueueNode<E, K> temp = priorityQueue[beggining];
+            priorityQueue[beggining] = priorityQueue[rightElement];
+            priorityQueue[rightElement] = temp;
+        }
+        sortGrMin(beggining, rightElement - 1);
+        sortGrMin(rightElement + 1, end);
+    }
+
+
+    public void sortMinGr(int inicio){
         int fin = 0;
 
         for (int i = 0; i < priorityQueue.length; i++) {
@@ -83,86 +116,40 @@ public class PriorityQueue<E, K extends Comparable<K>> implements IPriorityQueue
             }
         }
 
-        quickSortMajorMinor(inicio, fin);
+        sortMinGr(inicio, fin);
     }
 
-    public void quickSortMajorMinor(int inicio, int fin) {
+    public void sortMinGr(int begin, int end) {
 
-        if (inicio >= fin) return;
-        PriorityQueueNode<E,K> pivote = priorityQueue[inicio];
-        int elemIzq = inicio + 1;
-        int elemDer = fin;
+        if (begin >= end) return;
 
-        while (elemIzq <= elemDer) {
-            while (elemIzq <= fin && (priorityQueue[elemIzq].compareTo(pivote.getKey())) >= 0)  {
-                elemIzq++;
+        PriorityQueueNode<E,K> pivote = priorityQueue[begin];
+        int leftElement = begin + 1;
+        int rightElement = end;
+
+
+        while (leftElement <= rightElement) {
+            while (leftElement <= end && (priorityQueue[leftElement].compareTo(pivote.getKey())<0) ) {
+                leftElement++;
             }
-            while (elemDer > inicio && (priorityQueue[elemDer].compareTo(pivote.getKey())) < 0) {
-                elemDer--;
+            while (rightElement > begin && (priorityQueue[rightElement].compareTo(pivote.getKey()) >= 0) ) {
+                rightElement--;
             }
-            if (elemIzq < elemDer) {
-                PriorityQueueNode<E, K> temp = priorityQueue[elemIzq];
-                priorityQueue[elemIzq] = priorityQueue[elemDer];
-                priorityQueue[elemDer] = temp;
-            }
-        }
-
-        if (elemDer > inicio) {
-            PriorityQueueNode<E, K> temp = priorityQueue[inicio];
-            priorityQueue[inicio] = priorityQueue[elemDer];
-            priorityQueue[elemDer] = temp;
-        }
-        quickSortMajorMinor(inicio, elemDer - 1);
-        quickSortMajorMinor(elemDer + 1, fin);
-    } // quicksort for priority queue (major to minor)
-
-
-    public void quickSortMinorMajor(int inicio){
-        int fin = 0;
-
-        for (int i = 0; i < priorityQueue.length; i++) {
-            if(priorityQueue[i]==null){
-                fin = i-1;
-                break;
-            } else if(i==priorityQueue.length-1){
-                fin = priorityQueue.length-1;
+            if (leftElement < rightElement) {
+                PriorityQueueNode<E, K> temp = priorityQueue[leftElement];
+                priorityQueue[leftElement] = priorityQueue[rightElement];
+                priorityQueue[rightElement] = temp;
             }
         }
 
-        quickSortMinorMajor(inicio, fin);
+        if (rightElement > begin) {
+            PriorityQueueNode<E, K> temp = priorityQueue[begin];
+            priorityQueue[begin] = priorityQueue[rightElement];
+            priorityQueue[rightElement] = temp;
+        }
+        sortMinGr(begin, rightElement - 1);
+        sortMinGr(rightElement + 1, end);
     }
-
-    public void quickSortMinorMajor(int inicio, int fin) {
-
-        if (inicio >= fin) return;
-
-        PriorityQueueNode<E,K> pivote = priorityQueue[inicio];
-        int elemIzq = inicio + 1;
-        int elemDer = fin;
-
-
-        while (elemIzq <= elemDer) {
-            while (elemIzq <= fin && (priorityQueue[elemIzq].compareTo(pivote.getKey())<0) ) {
-                elemIzq++;
-            }
-            while (elemDer > inicio && (priorityQueue[elemDer].compareTo(pivote.getKey()) >= 0) ) {
-                elemDer--;
-            }
-            if (elemIzq < elemDer) {
-                PriorityQueueNode<E, K> temp = priorityQueue[elemIzq];
-                priorityQueue[elemIzq] = priorityQueue[elemDer];
-                priorityQueue[elemDer] = temp;
-            }
-        }
-
-        if (elemDer > inicio) {
-            PriorityQueueNode<E, K> temp = priorityQueue[inicio];
-            priorityQueue[inicio] = priorityQueue[elemDer];
-            priorityQueue[elemDer] = temp;
-        }
-        quickSortMinorMajor(inicio, elemDer - 1);
-        quickSortMinorMajor(elemDer + 1, fin);
-    } // quicksort for priority queue (minor to major)
 
     public boolean isEmpty() {
 
@@ -175,7 +162,7 @@ public class PriorityQueue<E, K extends Comparable<K>> implements IPriorityQueue
         } else {
             return false;
         }
-    } // Is empty
+    }
 
     public int occupiedSize(){
 
@@ -193,5 +180,19 @@ public class PriorityQueue<E, K extends Comparable<K>> implements IPriorityQueue
         }
 
         return size;
-    } // occuped size
+    }
+    @Override
+    public void delete(int index){
+
+        if(isEmpty()){
+            return;
+        } else {
+            priorityQueue[index] = null; // 1
+
+            for (int i = index; i < priorityQueue.length-1; i++) {
+
+                priorityQueue[i] = priorityQueue[i+1];
+            }
+        }
+    }
 }
