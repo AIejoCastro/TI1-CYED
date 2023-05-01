@@ -63,8 +63,4 @@ public class Queue<E> {
     public Node<E> getHead() {
         return head;
     }
-    
-    public Node<E> getTail() {
-        return tail;
-    }
 }

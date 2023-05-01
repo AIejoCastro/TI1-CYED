@@ -40,16 +40,9 @@ public class Node<E> implements Comparable<E>{
         return ((Comparable<E>) getItem()).compareTo(o);
     }
 
-
-
-
     @Override
     public String toString() {
     	
         return getItem().toString();
     }
-
-
-
-
 }
